@@ -24,6 +24,7 @@ import EditPrivacyPolicy from "../pages/Settings/EditPrivacyPolicy";
 import EditTermsConditions from "../pages/Settings/EditTermsConditions";
 import PrivacyPolicy from "../pages/Settings/PrivacyPolicy";
 import TermsConditions from "../pages/Settings/TermsConditions";
+import Subscription from "./../pages/Main/Subscription/Subscription";
 
 export const dashboardItems = [
   {
@@ -85,7 +86,7 @@ export const dashboardItems = [
     name: "Subscription",
     path: "subscription",
     icon: PiUsersThree,
-    element: <TabSubscription />,
+    element: <Subscription />,
   },
   {
     name: "Support",
