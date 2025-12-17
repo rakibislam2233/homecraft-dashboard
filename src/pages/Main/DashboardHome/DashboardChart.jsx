@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import LoaderWraperComp from "../../../Components/LoaderWraperComp";
+import {MdKeyboardArrowDown} from 'react-icons/md'
 
 const DashboardChart = () => {
   const [year, setYear] = useState(dayjs().year());
@@ -81,11 +82,14 @@ const DashboardChart = () => {
   return (
     <div className="bg-white rounded-lg px-[24px] py-[15px] drop-shadow-lg">
       <div className="flex justify-between items-center">
-        <h4 className="text-[20px] text-primary font-medium">Earnings</h4>
+        <h4 className="text-[20px] text-black font-medium roboto">Earnings</h4>
         <DatePicker
           picker="year"
+          className="!text-black custom-year-picker !border-none !w-24"
           value={dayjs().year(year)}
+          defaultValue={dayjs().year(year)}
           onChange={handleYearChange}
+          suffixIcon={<MdKeyboardArrowDown color="#000" size={24} />}
         />
       </div>
       <LoaderWraperComp>

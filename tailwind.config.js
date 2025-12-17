@@ -13,6 +13,9 @@ export default {
         "light-gray": "#E7F8FF",
         "green-playground": "#00C38A",
       },
+      fontFamily: {
+        sans: ['"Open Sans"', "sans-serif"],
+      },
     },
   },
   plugins: [],

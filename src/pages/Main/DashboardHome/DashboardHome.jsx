@@ -7,6 +7,10 @@ import DashboardChart from "./DashboardChart";
 import { FaArrowRight, FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import image from "../../../assets/images/host-details-image.png";
+import total_acc from "../../../assets/dashboard/verify-acc.svg";
+import total_user from "../../../assets/dashboard/total-client.svg";
+import total_professional from "../../../assets/dashboard/total-profession.svg";
+import total_earning from "../../../assets/dashboard/total-earning.svg";
 
 const dummyData = [
   {
@@ -83,10 +87,10 @@ export default function DashboardHome() {
   function CardInfo({ icon, title, number }) {
     return (
       <>
-        <div>{icon}</div>
+        <img src={icon} className="w-12 h-12" alt="icon" />
         <div>
-          <div className="text-xl font-semibold ">{title}</div>
-          <div className="text-3xl font-bold">{number}</div>
+          <div className="2xl:text-xl text-base font-medium roboto ">{title}</div>
+          <div className="text-3xl font-bold roboto">{number}</div>
         </div>
       </>
     );
@@ -94,39 +98,39 @@ export default function DashboardHome() {
 
   return (
     <>
-      <div className="space-y-2 md:space-y-4 lg:space-y-6">
-        <div className="flex gap-2 w-full">
-          <div className="w-4/6 border border-primary rounded-lg drop-shadow-xl">
+      <div className="space-y-2 md:space-y-4 lg:space-y-6 mt-8">
+        <div className="flex gap-9 w-full">
+          <div className="w-[60%] border border-[#700000EB] rounded-lg drop-shadow drop-shadow-[#0000001A]">
             <DashboardChart />
           </div>
-          <div className="flex justify-center h-36 rounded-lg drop-shadow-xl w-2/6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-white bg-gradient-to-t from-[#4D0304] to-[#8E0003] rounded-lg px-4 flex justify-center items-center gap-4 w-[250px] h-[150px]">
+          <div className="flex justify-center rounded-lg w-[40%]">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-7 w-full h-full">
+              <div className="text-white bg-gradient-to-t from-[#4D0304] to-[#8E0003] rounded-lg px-4 flex justify-center items-center gap-4  w-full h-full">
                 <CardInfo
-                  icon={<GrMoney size={40} />}
+                  icon={total_earning}
                   title="Total Earning"
                   number={`$254.99`}
                 />
               </div>
 
-              <div className="text-white bg-gradient-to-t from-[#0C3D00] to-[#21A300] rounded-lg px-4 flex justify-center items-center gap-4 w-[250px] h-[150px]">
+              <div className="text-white bg-gradient-to-t from-[#0C3D00] to-[#21A300] rounded-lg px-4 flex justify-center items-center gap-4  w-full h-full">
                 <CardInfo
-                  icon={<RiVerifiedBadgeFill size={40} />}
+                  icon={total_acc}
                   title="Verified A.C"
                   number={`112`}
                 />
               </div>
 
-              <div className="text-white bg-gradient-to-t from-[#996300] to-[#FFA500] rounded-lg px-4 flex justify-center items-center gap-4 w-[250px] h-[150px]">
+              <div className="text-white bg-gradient-to-t from-[#996300] to-[#FFA500] rounded-lg px-1 flex justify-center items-center gap-4  w-full h-full">
                 <CardInfo
-                  icon={<FaHospitalUser size={40} />}
+                  icon={total_professional}
                   title="Total Profession"
                   number={`254`}
                 />
               </div>
-              <div className="text-white bg-gradient-to-t from-[#771212] to-[#DD2222] rounded-lg px-4 flex justify-center items-center gap-4 w-[250px] h-[150px]">
+              <div className="text-white bg-gradient-to-t from-[#771212] to-[#DD2222] rounded-lg px-4 flex justify-center items-center gap-4 w-full h-full">
                 <CardInfo
-                  icon={<FaUsers size={40} />}
+                  icon={total_user}
                   title="Total Client"
                   number={`1250`}
                 />
