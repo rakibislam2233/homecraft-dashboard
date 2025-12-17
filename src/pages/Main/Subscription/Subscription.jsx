@@ -1,118 +1,151 @@
-import { Checkbox, Form, Input, message, Modal, Select } from "antd";
-import { useState } from "react";
+import { Checkbox, Form, Input, message, Modal, Select, Spin } from "antd";
+import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { TiTickOutline } from "react-icons/ti";
+import {
+  useGetSubscriptionsQuery,
+  useCreateSubscriptionMutation,
+  useUpdateSubscriptionMutation,
+} from "./../../../redux/features/subscription/subscriptionApi";
 
 const { Option } = Select;
 
-export default function Subscription({ type }) {
+// Feature schema to maintain labels/descriptions for API payload
+const FEATURE_SCHEMA = {
+  fullProfileAccess: {
+    label: "Full profile & portfolio",
+    description: "Show complete professional profile with portfolio",
+  },
+  bioAndReview: {
+    label: "Biographic and review",
+    description: "Add biography and receive client reviews",
+  },
+  onlineAppointmentBooking: {
+    label: "Online appointment booking",
+    description: "Clients can book appointments directly",
+  },
+  clientMessagingAccess: {
+    label: "Client messaging access",
+    description: "Direct chat access with clients",
+  },
+  basicStats: {
+    label: "Basic stats (views, clicks)",
+    description: "View how many clients viewed your profile",
+  },
+  maxProjectsPerWeek: {
+    label: "Accept up to 4 projects/week",
+    description: "You can manage 3 new projects every week",
+  },
+  localVisibility: {
+    label: "Local visibility",
+    description: "Show your profile to nearby clients",
+  },
+  noCommission: {
+    label: "No commission on services",
+    description: "Keep 100% of your earnings — no commission charged",
+  },
+};
+
+export default function Subscription() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("create");
   const [form] = Form.useForm();
+  const [editingPlanId, setEditingPlanId] = useState(null);
 
-  const plans = [
-    {
-      id: 1,
-      title: "Basic Plan",
-      subTitle: "Try Basic Plan",
-      price: "0.00",
-      features: [
-        "View professional profiles",
-        "Immediate appointment backlog",
-        "Email-based contact",
-        "Submit up to 2 projects/intends",
-        "£3.59 project for access",
-        "Unlimited functions (using payment)",
-      ],
-    },
-    {
-      id: 2,
-      title: "Premium Plan",
-      subTitle: "Try Premium Plan",
-      price: "49.00",
-      features: [
-        "Watch messaging with professionals",
-        "Create & manage projects",
-        "Submit it projects/intends (£2/month)",
-        "€4.99/pages for access",
-        "Unlimited negotiated functions",
-        "Unlimited negotiated functions",
-      ],
-    },
-  ];
+  // API hooks
+  const { data, isLoading, isError } = useGetSubscriptionsQuery({
+    page: 1,
+    limit: 10,
+  });
 
-  const facilities = [
-    { key: "submit_projects", label: "Submit up to 2 projects/month" },
-    { key: "project_extras", label: "£3.59/project for extras" },
-    { key: "unlimited_favorites", label: "Unlimited favorites (unorganized)" },
-    { key: "messaging", label: "Watch messaging with professionals" },
-    { key: "manage_projects", label: "Create & manage projects" },
-  ];
+  const [createSubscription] = useCreateSubscriptionMutation();
+  const [updateSubscription] = useUpdateSubscriptionMutation();
+
+  const plans = data?.data?.results || [];
 
   const handleCreatePlan = () => {
     setModalType("create");
+    setEditingPlanId(null);
     setIsModalOpen(true);
     form.resetFields();
   };
 
   const handleEditPlan = (plan) => {
     setModalType("edit");
+    setEditingPlanId(plan.id);
     setIsModalOpen(true);
+
+    const featureValues = {};
+    Object.keys(FEATURE_SCHEMA).forEach((key) => {
+      featureValues[key] = plan.features?.[key]?.enabled ?? false;
+    });
+
     form.setFieldsValue({
-      serviceFor: plan.title,
-      planName: plan.title,
+      serviceFor: plan.plan,
+      planName: plan.plan,
       planPrice: plan.price,
-      planExpiry: "1 Month",
-      view_profiles: true,
-      appointment_booking: true,
-      email_contact: true,
-      submit_projects: true,
-      project_extras: true,
-      unlimited_favorites: true,
+      planExpiry: plan.durationLabel,
+      ...featureValues,
     });
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setEditingPlanId(null);
     form.resetFields();
   };
 
   const handleFinish = async (values) => {
     try {
-      const facilitiesData = {};
-      facilities.forEach((facility) => {
-        facilitiesData[facility.key] = values[facility.key] || false;
+      const features = {};
+      Object.entries(FEATURE_SCHEMA).forEach(([key, meta]) => {
+        features[key] = {
+          label: meta.label,
+          description: meta.description,
+          enabled: Boolean(values[key]),
+        };
       });
 
       const payload = {
-        serviceFor: values.serviceFor,
-        planName: values.planName,
-        planPrice: values.planPrice,
-        planExpiry: values.planExpiry,
-        facilities: facilitiesData,
-        type: modalType,
+        plan: values.planName,
+        price: Number(values.planPrice),
+        durationLabel: values.planExpiry,
+        features,
       };
 
-      console.log("Payload to send to backend:", payload);
+      if (modalType === "create") {
+        await createSubscription(payload).unwrap();
+        message.success("Plan created successfully");
+      } else {
+        await updateSubscription({ id: editingPlanId, payload }).unwrap();
+        message.success("Plan updated successfully");
+      }
 
-      // Here you would make your API call
-      // await createOrUpdatePlan(payload);
-
-      message.success(
-        `Plan ${modalType === "create" ? "created" : "updated"} successfully!`
-      );
       setIsModalOpen(false);
+      setEditingPlanId(null);
       form.resetFields();
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
       message.error("Something went wrong!");
     }
   };
 
+  if (isLoading) return <Spin className="mt-8" />;
+
+  if (isError)
+    return <div className="text-center mt-8">Failed to load subscriptions</div>;
+
   return (
     <>
+      <div className="text-center mt-6">
+        <h2 className="text-4xl font-bold">Your Subscription Plan </h2>
+        {/* <p className="text-sm">Growth Your Bussiness (Save 2.5%)</p> */}
+        <p className="text-sm">Growth Your Bussiness</p>
+        <h3 className="font-bold text-xl">Professional</h3>
+      </div>
       <div className="flex justify-end">
         <button
+          disabled
           onClick={handleCreatePlan}
           className="bg-primary hover:bg-primary/80 text-white font-semibold px-12 py-2 rounded-full flex items-center gap-2 "
         >
@@ -128,13 +161,13 @@ export default function Subscription({ type }) {
             </div>
           ) : (
             <>
-              {plans?.map((plan, index) => (
+              {plans.map((plan, index) => (
                 <div
                   key={index}
                   className="border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <h2 className="text-2xl font-bold text-center mb-2">
-                    {plan.title}
+                    {plan.plan}
                   </h2>
                   <p className="text-sm text-center mb-4">
                     <span className="text-3xl text-red-600 font-bold">
@@ -144,14 +177,14 @@ export default function Subscription({ type }) {
                   </p>
 
                   <h3 className="bg-red-800 text-white py-2 px-4 font-semibold mb-3 text-center">
-                    {plan.subTitle}
+                    {plan.subTitle || "Subscription Plan"}
                   </h3>
                   <div className="pt-4">
                     <ul className="space-y-2">
-                      {plan.features.map((feature, i) => (
+                      {Object.keys(plan.features || {}).map((key, i) => (
                         <li key={i} className="flex items-center">
                           <TiTickOutline className="m-2 h-4 w-4 rounded-full border border-green-400 text-green-600" />
-                          <span>{feature}</span>
+                          <span>{plan.features[key].label}</span>
                         </li>
                       ))}
                     </ul>
@@ -197,8 +230,8 @@ export default function Subscription({ type }) {
             rules={[{ required: true, message: "Please select service type" }]}
           >
             <Select placeholder="Client/Professional" size="large">
-              <Option value="Basic Plan">Client</Option>
-              <Option value="Premium Plan">Professional</Option>
+              <Option value="Basic">Client</Option>
+              <Option value="Premium">Professional</Option>
             </Select>
           </Form.Item>
 
@@ -208,8 +241,8 @@ export default function Subscription({ type }) {
             rules={[{ required: true, message: "Please select plan name" }]}
           >
             <Select placeholder="Select plan name" size="large">
-              <Option value="Basic Plan">Basic Plan</Option>
-              <Option value="Premium Plan">Premium Plan</Option>
+              <Option value="Basic">Basic</Option>
+              <Option value="Premium">Premium</Option>
             </Select>
           </Form.Item>
 
@@ -247,16 +280,13 @@ export default function Subscription({ type }) {
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-4">Facilities</h3>
             <div className="px-4">
-              {facilities.map((facility) => (
-                <div
-                  key={facility.key}
-                  className="flex items-center justify-between"
-                >
+              {Object.keys(FEATURE_SCHEMA).map((key) => (
+                <div key={key} className="flex items-center justify-between">
                   <span className="text-sm text-gray-700 flex-1">
-                    {facility.label}
+                    {FEATURE_SCHEMA[key].label}
                   </span>
                   <Form.Item
-                    name={facility.key}
+                    name={key}
                     valuePropName="checked"
                     className="mb-0"
                   >

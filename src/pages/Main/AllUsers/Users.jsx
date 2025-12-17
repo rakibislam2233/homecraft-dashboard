@@ -148,7 +148,7 @@ export default function Users() {
   return (
     <div className="mx-auto">
       {/* total users/clients number */}
-      <div className="border border-black shadow-lg rounded flex justify-start items-center gap-4 p-4 my-4">
+      <div className="border border-primary shadow-lg rounded-xl flex justify-start items-center gap-4 p-4 my-4">
         <div className="bg-primary p-4 rounded text-white">
           <FaUserFriends size={32} />
         </div>

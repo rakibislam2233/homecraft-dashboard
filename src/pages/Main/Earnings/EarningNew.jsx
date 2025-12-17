@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
 import imageOne from "../../../assets/images/earning_one.svg";
 import imageTwo from "../../../assets/images/earning_two.svg";
+import { useGetEarningHistoryQuery } from "../../../redux/features/earning/earningApi";
 
 const { Option } = Select;
 
@@ -16,6 +17,14 @@ export default function EarningNew() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+
+  // // Summary statistics
+  // const { data: statisticsData, isLoading: statisticsLoading } =
+  //   useGetStatisticsQuery();
+
+  // Earning history (for table / chart if needed)
+  const { data: earningHistory, isLoading: historyLoading } =
+    useGetEarningHistoryQuery({ page: 1, limit: 10 });
 
   const showModal = (record) => {
     setSelectedClient(record);
