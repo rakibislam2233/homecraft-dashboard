@@ -4,7 +4,12 @@ import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { ErrorSwal, SuccessSwal } from "../../../utils/allSwalFire";
-import imageS from "../../../assets/images/host-details-image.png";
+import {
+  useGetCategoriesQuery,
+  useAddCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} from "../../../redux/features/category/categoryApi";
 
 const CategoryNew = () => {
   const [page, setPage] = useState(1);
@@ -13,85 +18,72 @@ const CategoryNew = () => {
   const [categoryId, setCategoryId] = useState(null);
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // To show the image preview
+  const [imagePreview, setImagePreview] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
-  // Mocked data instead of calling API
-  const data = {
-    data: [
-      { id: 1, name: "Category 1", image: imageS },
-      { id: 2, name: "Category 2", image: imageS },
-      { id: 3, name: "Category 3", image: imageS },
-      { id: 4, name: "Category 4", image: imageS },
-    ],
-    pagination: {
-      totalData: 4,
-    },
-  };
+  // API
+  const { data, isLoading } = useGetCategoriesQuery({ page, limit: 10 });
+  const [addCategory] = useAddCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+
+  // MAP API RESPONSE → TABLE DATA
+  const tableData =
+    data?.data?.results?.map((item) => ({
+      id: item._id,
+      name: item.name,
+      image: item.image,
+    })) || [];
 
   const handleAddCategory = async () => {
     try {
-      // Simulate API response
-      const response = { message: "Banner added successfully" };
+      const formData = new FormData();
+      formData.append("name", name);
+      if (image) formData.append("image", image);
 
-      SuccessSwal({
-        title: "",
-        text: response.message || "Banner added successfully",
-      });
+      const res = await addCategory(formData).unwrap();
+
+      SuccessSwal({ text: res.message });
       resetModal();
       setIsModalVisible(false);
     } catch (error) {
-      ErrorSwal({
-        title: "",
-        text: error?.message || "Failed to add banner",
-      });
+      ErrorSwal({ text: error?.data?.message || "Failed to add category" });
     }
   };
 
   const handleEditCategory = async () => {
     try {
-      // Simulate API response
-      const response = { message: "Banner updated successfully" };
+      const formData = new FormData();
+      formData.append("name", name);
+      if (image) formData.append("image", image);
 
-      SuccessSwal({
-        title: "",
-        text: response.message || "Banner updated successfully",
-      });
+      const res = await updateCategory({
+        id: categoryId,
+        formData,
+      }).unwrap();
+
+      SuccessSwal({ text: res.message });
       resetModal();
       setIsModalVisible(false);
     } catch (error) {
-      ErrorSwal({
-        title: "",
-        text: error?.message || "Failed to update banner",
-      });
+      ErrorSwal({ text: error?.data?.message || "Failed to update category" });
     }
   };
 
-  const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async () => {
     try {
-      // Simulate API delete response
-      const response = { message: "Category deleted successfully" };
-      SuccessSwal({
-        title: "",
-        text: response.message || "Category deleted successfully",
-      });
+      const res = await deleteCategory(categoryId).unwrap();
+      SuccessSwal({ text: res.message });
       setIsDeleteModalVisible(false);
     } catch (error) {
-      ErrorSwal({
-        title: "",
-        text: error?.message || "Failed to delete category",
-      });
+      ErrorSwal({ text: error?.data?.message || "Failed to delete category" });
     }
   };
 
   const handleOpenModalForAdd = () => {
     setIsEditMode(false);
-    setCategoryId(null);
-    setName("");
-    setImage(null);
-    setImagePreview(null); // Clear image preview
+    resetModal();
     setIsModalVisible(true);
   };
 
@@ -99,78 +91,70 @@ const CategoryNew = () => {
     setIsEditMode(true);
     setCategoryId(category.id);
     setName(category.name);
-    setImagePreview(category.image || null); // Set existing image preview (if any)
+    setImagePreview(category.image);
     setIsModalVisible(true);
   };
 
-  const handleOpenDeleteModal = (category) => {
-    setCategoryId(category.id);
-    setIsDeleteModalVisible(true);
-  };
-
-  // Handle image file selection
   const handleImageChange = (info) => {
-    if (info.file.status === "done") {
-      setImage(info.file.originFileObj);
-      setImagePreview(URL.createObjectURL(info.file.originFileObj)); // Preview the selected image
-    }
+    const file = info.file.originFileObj;
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
+    setFileList([info.file]);
   };
 
-  // Handle reset of modal fields
   const resetModal = () => {
     setName("");
     setImage(null);
     setImagePreview(null);
     setFileList([]);
+    setCategoryId(null);
   };
 
   const columns = [
     {
       title: "S. No",
-      dataIndex: "id",
-      key: "id",
-      render: (text, record, index) => index + 1,
+      render: (_, __, index) => index + 1,
       align: "center",
     },
     {
       title: "Category",
       dataIndex: "name",
-      key: "name",
       align: "center",
     },
     {
       title: "Image",
       dataIndex: "image",
-      key: "image",
+      align: "center",
       render: (image) => (
         <img
-          src={image || image}
+          src={image}
           alt="Category"
           style={{ width: 50, height: 50, objectFit: "cover" }}
         />
       ),
-      align: "center",
     },
     {
       title: "Action",
-      key: "action",
-      render: (text, record) => (
+      align: "center",
+      render: (_, record) => (
         <div className="flex justify-center gap-2">
           <Button
-            icon={<FaEdit />} // Edit icon
+            icon={<FaEdit />}
             type="primary"
             shape="round"
             onClick={() => handleOpenModalForEdit(record)}
           />
           <Button
-            icon={<RiDeleteBin6Fill size={20} />} // Delete icon
-            type="danger"
+            icon={<RiDeleteBin6Fill size={18} />}
+            danger
             shape="round"
-            onClick={() => handleOpenDeleteModal(record)}
+            onClick={() => {
+              setCategoryId(record.id);
+              setIsDeleteModalVisible(true);
+            }}
           />
         </div>
       ),
-      align: "center",
     },
   ];
 
@@ -181,105 +165,77 @@ const CategoryNew = () => {
           Add Category
         </Button>
       </div>
-      <div>
-        <Table
-          className="w-[60%]"
-          columns={columns}
-          dataSource={data.data}
-          rowKey={(record) => record.id}
-          pagination={{
-            current: page,
-            total: data?.pagination?.totalData || 0,
-            pageSize: 10,
-            showSizeChanger: false,
-            onChange: (current) => setPage(current),
-          }}
-        />
-      </div>
 
-      {/* Modal for Add/Edit Category */}
+      <Table
+        className="w-[60%]"
+        columns={columns}
+        dataSource={tableData}
+        loading={isLoading}
+        rowKey="id"
+        pagination={{
+          current: page,
+          total: data?.data?.pagination?.totalResult || 0,
+          pageSize: 10,
+          onChange: setPage,
+        }}
+      />
+
+      {/* ADD / EDIT MODAL */}
       <Modal
         title={isEditMode ? "Edit Category" : "Add Category"}
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
         centered
-        width={500}
       >
-        <div className="space-y-4">
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Category Name"
-            className="mt-2"
-          />
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Category Name"
+        />
 
-          {/* Upload Image */}
-          <Upload
-            name="image"
-            listType="picture-card"
-            onChange={handleImageChange}
-            showUploadList={false}
-            customRequest={({ file, onSuccess }) => onSuccess("ok")}
-          >
-            {imagePreview ? (
-              <img src={imagePreview} alt="image" style={{ width: "100%" }} />
-            ) : (
-              <div>
-                <UploadOutlined />
-                <div>Upload Image</div>
-              </div>
-            )}
-          </Upload>
+        <Upload
+          listType="picture-card"
+          fileList={fileList}
+          showUploadList={false}
+          onChange={handleImageChange}
+          customRequest={({ onSuccess }) => onSuccess("ok")}
+        >
+          {imagePreview ? (
+            <img src={imagePreview} alt="preview" style={{ width: "100%" }} />
+          ) : (
+            <div>
+              <UploadOutlined />
+              <div>Upload Image</div>
+            </div>
+          )}
+        </Upload>
 
-          <Button
-            type="primary"
-            onClick={isEditMode ? handleEditCategory : handleAddCategory}
-            className="w-full mt-4"
-          >
-            {isEditMode ? "Save Changes" : "Save"}
-          </Button>
-        </div>
+        <Button
+          type="primary"
+          onClick={isEditMode ? handleEditCategory : handleAddCategory}
+          className="w-full"
+        >
+          {isEditMode ? "Save Changes" : "Save"}
+        </Button>
       </Modal>
 
-      {/* Delete Confirmation Modal */}
+      {/* DELETE MODAL */}
       <Modal
-        title={
-          <span className="text-primary text-xl font-semibold">
-            Delete Category
-          </span>
-        }
+        title="Delete Category"
         open={isDeleteModalVisible}
         onCancel={() => setIsDeleteModalVisible(false)}
-        footer={[
-          <div className="flex justify-center gap-4">
-            <button
-              key="cancel"
-              onClick={() => setIsDeleteModalVisible(false)}
-              className="border border-gray-300 rounded-full px-8 py-2 mt-4 hover:bg-gray-100"
-            >
-              Cancel
-            </button>
-            <button
-              key="delete"
-              onClick={() => handleDeleteCategory(categoryId)}
-              className="bg-red-600 text-white rounded-full px-8 py-2 mt-4 hover:bg-red-700"
-            >
-              Delete
-            </button>
-          </div>,
-        ]}
+        footer={null}
         centered
-        width={400}
       >
-        <div className="space-y-4 mt-4 text-center">
-          <p className="text-lg">
-            Are you sure you want to delete{" "}
-            {/* <span className="font-semibold">{selectedClient.name}</span>? */}
-          </p>
-          <p className="text-red-600 font-bold">
-            This action cannot be undone.
-          </p>
+        <p className="text-center text-lg">
+          Are you sure you want to delete this category?
+        </p>
+        <div className="flex justify-center gap-4 mt-4">
+          <Button onClick={() => setIsDeleteModalVisible(false)}>Cancel</Button>
+          <Button danger onClick={handleDeleteCategory}>
+            Delete
+          </Button>
         </div>
       </Modal>
     </>

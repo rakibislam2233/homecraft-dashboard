@@ -5,7 +5,7 @@ const { TabPane } = Tabs;
 
 export default function TabSubscription() {
   return (
-    <div className="text-center">
+    <div className="text-center mt-8">
       <h2 className="text-4xl font-bold">Your Subscription Plan </h2>
       {/* <p className="text-sm">Growth Your Bussiness (Save 2.5%)</p> */}
       <p className="text-sm">Growth Your Bussiness</p>
