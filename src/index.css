@@ -22,6 +22,10 @@ body {
   border: 0.5px solid #A15454 !important;
 }
 
+.red-button {
+  @apply bg-[linear-gradient(to_top,#800000_0%,#660000D9_85%,#700000EB_92%)];
+}
+
 /* Force Open Sans for Ant Design components */
 .ant-btn,
 .ant-input,

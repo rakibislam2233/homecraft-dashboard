@@ -60,12 +60,15 @@ export default function ProfessionalDetails() {
   const bio = profile?.bio || "No description available.";
   const isVerified = verificationStatus === "verified";
 
+  console.log("professionalData", professionalData);
+
   // Company Info
   const companyInfo = profile?.companyInfo;
   const companyName = companyInfo?.companyName || "N/A";
   const companyEmail = companyInfo?.companyEmail || "N/A";
   const siretNumber = companyInfo?.siretNumber || "N/A";
-  const companyAddress = companyInfo?.companyAddress?.formattedAddress || "N/A";
+  const companyAddress =
+    companyInfo?.companyAddress?.formattedAddress || "Not Provided";
   const kbisDocumentUrl = companyInfo?.kbisDocument;
 
   // Contact Info
@@ -108,7 +111,7 @@ export default function ProfessionalDetails() {
 
   return (
     <>
-      <div className="flex justify-between items-center border rounded shadow-sm mt-4 py-4 px-4">
+      <div className="flex justify-between items-center border border-[#E4E5E8] rounded-lg mt-4 py-4 px-4">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2">
             <FaChevronLeft />
@@ -148,14 +151,14 @@ export default function ProfessionalDetails() {
       <div className="flex flex-col lg:flex-row gap-8 pl-16 py-4">
         <div className="flex-1">
           <div>
-            <h3 className="text-xl font-bold text-gray-900 pb-1">
+            <h3 className="text-xl font-medium text-gray-900 pb-1">
               Description
             </h3>
-            <p className="text-gray-700">{bio}</p>
+            <p className="text-[#545454]">{bio}</p>
           </div>
 
-          <div className="border p-4 rounded-lg shadow-md my-4">
-            <p className="text-xl font-bold text-gray-900 pb-4">
+          <div className="border border-[#E4E5E8] rounded-lg p-4 my-4">
+            <p className="text-xl font-medium text-gray-900 pb-4">
               Company Information
             </p>
 
@@ -167,15 +170,15 @@ export default function ProfessionalDetails() {
                     size={20}
                   />
                   <div>
-                    <p className="text-gray-400 text-sm">Company Name</p>
-                    <p className="font-medium break-words">{companyName}</p>
+                    <p className="text-[#8A8A8A] text-sm">Company Name</p>
+                    <p className="break-words">{companyName}</p>
                   </div>
                 </p>
                 <p className="flex items-center gap-4">
                   <MdEmail className="text-primary flex-shrink-0" size={20} />
                   <div>
-                    <p className="text-gray-400 text-sm">Email address</p>
-                    <p className="font-medium break-words">{companyEmail}</p>
+                    <p className="text-[#8A8A8A] text-sm">Email address</p>
+                    <p className="break-words">{companyEmail}</p>
                   </div>
                 </p>
                 <p className="flex items-center gap-4">
@@ -183,9 +186,9 @@ export default function ProfessionalDetails() {
                     className="text-primary flex-shrink-0"
                     size={20}
                   />
-                  <div>
-                    <p className="text-gray-400 text-sm">Siret Number</p>
-                    <p className="font-medium break-words">{siretNumber}</p>
+                  <div div className="w-full">
+                    <p className="text-[#8A8A8A] text-sm">Siret Number</p>
+                    <p className="break-words">{siretNumber}</p>
                   </div>
                 </p>
               </div>
@@ -195,18 +198,16 @@ export default function ProfessionalDetails() {
                     className="text-primary flex-shrink-0 mt-1"
                     size={20}
                   />
-                  <div>
-                    <p className="text-gray-400 text-sm">Location</p>
-                    <p className="font-medium break-words w-[80%]">
-                      {companyAddress}
-                    </p>
+                  <div className="w-full">
+                    <p className="text-[#8A8A8A] text-sm">Location</p>
+                    <p className="break-words w-[80%]">{companyAddress}</p>
                   </div>
                 </p>
                 <p className="flex items-center gap-4">
                   <FaFilePdf className="text-primary flex-shrink-0" size={20} />
                   <div>
-                    <p className="text-gray-400 text-sm">Esther Howard</p>
-                    <p className="font-medium text-black">PDF</p>
+                    <p className="text-[#8A8A8A] text-sm">Esther Howard</p>
+                    <p className="text-black">PDF</p>
                   </div>
                   {kbisDocumentUrl && (
                     <button
@@ -221,8 +222,8 @@ export default function ProfessionalDetails() {
             </div>
           </div>
 
-          <div className="border p-4 rounded-lg shadow-md my-4">
-            <p className="text-xl font-bold text-gray-900 pb-4">Projects</p>
+          <div className="border border-[#E4E5E8] rounded-lg p-4 my-4">
+            <p className="text-xl font-medium text-gray-900 pb-4">Projects</p>
 
             {projectAttachments.length > 0 ? (
               <div className="grid grid-cols-2 gap-4">
@@ -247,7 +248,9 @@ export default function ProfessionalDetails() {
               </p>
             )}
 
-            <p className="text-xl font-bold text-gray-900 py-4">Certificates</p>
+            <p className="text-xl font-medium text-gray-900 py-4">
+              Certificates
+            </p>
             <div className="flex justify-start items-center gap-4">
               <p
                 className="flex items-center gap-1 underline cursor-pointer text-primary font-semibold truncate hover:text-primary/60 transition border rounded px-8 py-2"
@@ -272,8 +275,8 @@ export default function ProfessionalDetails() {
 
         {/* right side */}
         <div className="flex-1 lg:max-w-md">
-          <div className="border p-4 rounded-lg shadow-md my-4">
-            <p className="text-xl font-bold text-gray-900 pb-4">
+          <div className="border border-[#E4E5E8] rounded-lg p-4 my-4">
+            <p className="text-xl font-medium text-gray-900 pb-4">
               Contact Information
             </p>
 
@@ -324,8 +327,10 @@ export default function ProfessionalDetails() {
 
           <hr className="my-6 lg:hidden" />
 
-          <div className="border p-4 rounded-lg shadow-md my-4">
-            <p className="text-xl font-bold text-gray-900 pb-4">Service Area</p>
+          <div className="p-4 border border-[#E4E5E8] rounded-lg my-4">
+            <p className="text-xl font-medium text-gray-900 pb-4">
+              Service Area
+            </p>
             <div className="flex flex-wrap gap-2">
               {/* {["New York", "Paris", "USA", "London", "Berlin", "Tokyo"].map( */}
               {serviceAreas?.map((area, index) => (
@@ -341,8 +346,10 @@ export default function ProfessionalDetails() {
 
           <hr className="my-6 lg:hidden" />
 
-          <div className="border p-4 rounded-lg shadow-md my-4">
-            <p className="text-xl font-bold text-gray-900 pb-4">Social Media</p>
+          <div className="p-4 border border-[#E4E5E8] rounded-lg my-4">
+            <p className="text-xl font-medium text-gray-900 pb-4">
+              Social Media
+            </p>
             <div className="flex justify-start items-center gap-4">
               {facebookUrl ? (
                 <a

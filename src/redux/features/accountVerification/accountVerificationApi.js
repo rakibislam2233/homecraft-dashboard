@@ -3,13 +3,19 @@ import baseApi from "../../api/baseApi";
 export const accountVerificationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUnverifiedProfessionals: builder.query({
-      query: ({ page = 1, limit = 10 }) => ({
+      query: ({ page = 1, limit = 10, month, searchTerm }) => ({
         url: "/users/unverified-professionals",
         method: "GET",
-        params: { page, limit },
+        params: {
+          page,
+          limit,
+          ...(month && { month }),
+          ...(searchTerm && { searchTerm }),
+        },
       }),
       providesTags: ["unverifiedProfessionals"],
     }),
+
     verifyProfessional: builder.mutation({
       query: (id) => ({
         url: `/users/verify-professional/${id}`,
@@ -17,6 +23,7 @@ export const accountVerificationApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["unverifiedProfessionals"],
     }),
+
     rejectProfessional: builder.mutation({
       query: (id) => ({
         url: `/users/rejectProfessional/${id}`,

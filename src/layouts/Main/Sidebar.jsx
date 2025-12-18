@@ -9,6 +9,7 @@ import { cn } from "../../lib/utils";
 import { logout } from "../../redux/slices/authSlice";
 import { routeLinkGenerators } from "../../utils/routeLinkGenerators";
 import { IoIosArrowDown } from "react-icons/io";
+import logout_image from "../../assets/dashboard/logout.svg";
 
 const SubMenu = ({ children, isOpen, rootPath, location, openName, name }) => (
   <div
@@ -24,11 +25,13 @@ const SubMenu = ({ children, isOpen, rootPath, location, openName, name }) => (
         to={subPath}
         className={({ isActive }) =>
           isActive
-            ? "bg-white text-primary w-full px-4 py-1 flex items-center justify-start gap-3 transition-all text-lg"
-            : "text-white hover:text-primary hover:bg-white w-full px-4 py-1 flex items-center justify-start gap-3 transition-all text-lg"
+            ? "bg-white text-primary w-full px-4 py-1 flex items-center justify-start gap-2.5 transition-all text-lg"
+            : "text-white hover:text-primary hover:bg-white w-full px-4 py-1 flex items-center justify-start gap-2.5 transition-all text-lg"
         }
       >
-        <div>{createElement(subIcon, { size: "22", className: "font-bold" })}</div>
+        <div>
+          {createElement(subIcon, { size: "22", className: "font-bold" })}
+        </div>
         <span>{subName}</span>
       </NavLink>
     ))}
@@ -68,7 +71,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className="mt-10 max-h-[650px] overflow-y-auto space-y-1 xl:space-y-2 text-white">
+        <ul className="mt-10 max-h-[680px] overflow-y-auto space-y-5 text-white">
           {routeLinkGenerators(dashboardItems).map(
             ({ name, icon, path, children, rootPath }, indx) =>
               children?.length ? (
@@ -81,7 +84,7 @@ const Sidebar = () => {
                       }))
                     }
                     className={cn(
-                      "outline-none hover:text-primary hover:bg-white w-full px-4 py-2.5 flex items-center justify-between gap-3 text-lg transition-all ",
+                      "outline-none hover:text-primary hover:bg-white w-full px-4 py-2.5 flex items-center justify-between gap-2.5 text-lg transition-all ",
                       {
                         "bg-white text-primary py-2.5":
                           name === openName?.name ||
@@ -90,7 +93,7 @@ const Sidebar = () => {
                       }
                     )}
                   >
-                    <div className="flex items-center justify-start gap-3 w-full">
+                    <div className="flex items-center justify-start gap-3 w-full text-xl">
                       <div>{createElement(icon, { size: "28" })}</div>
                       <span>{name}</span>
                     </div>
@@ -119,8 +122,8 @@ const Sidebar = () => {
                     to={path}
                     className={({ isActive }) =>
                       isActive
-                        ? "bg-white text-primary w-full px-4 py-2.5 flex items-center justify-start gap-3 text-lg transition-all "
-                        : "hover:text-primary text-[20px] hover:bg-white w-full px-4 py-2.5 flex items-center justify-start gap-3 text-lg transition-all"
+                        ? "bg-white text-primary w-full px-4 py-2.5 flex items-center justify-start gap-3 text-xl transition-all "
+                        : "hover:text-primary text-[20px] hover:bg-white w-full px-4 py-2.5 flex items-center justify-start gap-3 text-lg transition-all text-xl"
                     }
                   >
                     <div>{createElement(icon, { size: "20" })}</div>
@@ -132,12 +135,12 @@ const Sidebar = () => {
         </ul>
 
         {/* Logout Button */}
-        <div className="p-[24px]">
+        <div className="py-1 px-4">
           <button
             onClick={handleLogOut}
-            className="bg-white text-primary w-full px-10 py-4 flex justify-center items-center gap-2 rounded-lg text-xl"
+            className="text-white hover:text-white/90 [transition:0.5s] w-full flex items-center gap-2.5 text-xl mb-5"
           >
-            <BiLogOut className="text-white" size={20} />
+            <img src={logout_image} className="w-8 h-8" alt="icon" />
             <span>Logout</span>
           </button>
         </div>

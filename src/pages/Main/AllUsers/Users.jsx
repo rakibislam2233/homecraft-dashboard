@@ -1,11 +1,12 @@
 import { Button, DatePicker, Input, Modal, Table } from "antd";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { BsInfoCircle } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useGetAllUserQuery } from "../../../redux/features/user/userApi";
+import { RxInfoCircled } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
 
 export default function Users() {
   const [page, setPage] = useState(1);
@@ -130,15 +131,15 @@ export default function Users() {
         <div className="flex gap-4">
           <button
             onClick={() => showDeleteModal(record)}
-            className="text-red-500 rounded-full bg-[#FDFAF3] p-1 border"
+            className="text-red-500 rounded-full bg-[#FDFAF3] p-1 m-0"
           >
-            <RiDeleteBin6Line size={16} />
+            <RiDeleteBin6Line size={20} />
           </button>
           <button
             onClick={() => showModal(record)}
-            className="text-[#883DBD] rounded-full bg-[#FDFAF3] p-1 border"
+            className="text-[#883DBD] rounded-full bg-[#FDFAF3] p-1 m-0"
           >
-            <BsInfoCircle size={16} />
+            <RxInfoCircled size={20} />
           </button>
         </div>
       ),
@@ -148,18 +149,20 @@ export default function Users() {
   return (
     <div className="mx-auto">
       {/* total users/clients number */}
-      <div className="border border-primary shadow-lg rounded-xl flex justify-start items-center gap-4 p-4 my-4">
+      <div className="border primary-border shadow-lg rounded-xl flex justify-start items-center gap-4 p-4 my-4">
         <div className="bg-primary p-4 rounded text-white">
           <FaUserFriends size={32} />
         </div>
         <div>
-          <div className="text-2xl font-semibold">Total Client's / User's</div>
-          <div className="text-3xl text-primary font-bold">{totalClients}</div>
+          <div className="text-2xl roboto font-semibold">
+            Total Client's / User's
+          </div>
+          <div className="text-3xl text-primary">{totalClients}</div>
         </div>
       </div>
 
       {/* below content */}
-      <div className="border shadow-sm rounded-lg">
+      <div className="border border-[#E4E5E8] rounded-lg">
         <div className="flex justify-between items-center p-4">
           <h3 className="text-2xl">Client's / User's List</h3>
           <div className="flex justify-around gap-4">
@@ -167,7 +170,7 @@ export default function Users() {
             <DatePicker
               placeholder="Select Date"
               style={{ width: "150px" }}
-              className="rounded-full"
+              className="rounded-full px-4 py-2"
               onChange={handleDateChange}
             />
             <Input
@@ -175,7 +178,7 @@ export default function Users() {
               value={searchTerm}
               onChange={handleSearchTermChange}
               style={{ width: "300px" }}
-              className="rounded-full"
+              className="rounded-full px-4 py-2"
               onPressEnter={handleSearch}
             />
             <Button
@@ -191,7 +194,7 @@ export default function Users() {
           columns={columns}
           dataSource={tableData}
           loading={isLoading}
-          className="shadow-md rounded"
+          className="rounded-lg"
           pagination={{
             pageSize: limit,
             total: totalClients,
@@ -205,12 +208,13 @@ export default function Users() {
 
       <Modal
         title={
-          <span className="text-xl text-center font-bold "> Client Info </span>
+          <h1 className="text-xl !text-center font-bold "> Client Info </h1>
         }
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         centered
+        closable={false}
         footer={[
           <div className="flex justify-center" key="ok-footer">
             <button
@@ -224,33 +228,45 @@ export default function Users() {
           </div>,
         ]}
       >
+        <div
+          onClick={handleCancel}
+          className="absolute top-0.5 right-0.5 w-9 h-9 bg-red-500 flex items-center justify-center cursor-pointer"
+          style={{
+            borderBottomLeftRadius: "1.25rem",
+            borderTopRightRadius: "0.5rem",
+          }}
+        >
+          <RxCross2 className="text-white text-xl" />
+        </div>
         {selectedClient && (
           <div className=" mt-8">
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Client Name</p>
-              <p>{selectedClient.profile?.fullName || "N/A"}</p>
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5">
+              <p className="font-semibold m-0">Client Name</p>
+              <p className="m-0">{selectedClient.profile?.fullName || "N/A"}</p>
             </div>
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Client Email</p>
-              <p>{selectedClient.email || "N/A"}</p>
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5 mt-3">
+              <p className="font-semibold m-0">Client Email</p>
+              <p className="m-0">{selectedClient.email || "N/A"}</p>
             </div>
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Client Address</p>
-              <p>{selectedClient.address || "N/A"}</p>
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5 mt-3 ">
+              <p className="font-semibold m-0">Client Address</p>
+              <p className="m-0">{selectedClient.address || "N/A"}</p>
             </div>
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Phone Number</p>
-              <p>{selectedClient.profile?.phoneNumber || "N/A"}</p>
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5 mt-3 ">
+              <p className="font-semibold m-0">Phone Number</p>
+              <p className="m-0">
+                {selectedClient.profile?.phoneNumber || "N/A"}
+              </p>
             </div>
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Date</p>
-              <p>
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5 mt-3 ">
+              <p className="font-semibold m-0">Date</p>
+              <p className="m-0">
                 {dayjs(selectedClient.createdAt).format("DD/MM/YYYY") || "N/A"}
               </p>
             </div>
-            <div className=" flex justify-between items-center border-b-2 px-2 ">
-              <p className="font-semibold">Verification Status</p>
-              <p className="capitalize">
+            <div className=" flex justify-between items-center border-b border-b-slate-500 px-2 pb-0.5 mt-3 ">
+              <p className="font-semibold m-0">Verification Status</p>
+              <p className="capitalize m-0">
                 {selectedClient.verificationStatus || "N/A"}
               </p>
             </div>
@@ -262,6 +278,7 @@ export default function Users() {
       <Modal
         open={isDeleteModalOpen}
         onCancel={handleDeleteCancel}
+        closable={false}
         centered
         footer={[
           <div className="flex justify-center gap-4" key="delete-footer">
@@ -282,6 +299,16 @@ export default function Users() {
           </div>,
         ]}
       >
+        <div
+          onClick={handleDeleteCancel}
+          className="absolute top-0.5 right-0.5 w-9 h-9 bg-red-500 flex items-center justify-center cursor-pointer"
+          style={{
+            borderBottomLeftRadius: "1.25rem",
+            borderTopRightRadius: "0.5rem",
+          }}
+        >
+          <RxCross2 className="text-white text-xl" />
+        </div>
         {selectedClient && (
           <div className="space-y-4 mt-4 text-center">
             <p className="text-lg">

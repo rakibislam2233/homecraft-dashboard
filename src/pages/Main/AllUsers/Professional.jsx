@@ -12,6 +12,8 @@ import {
   useGiveReviewMutation,
 } from "../../../redux/features/user/userApi";
 import { ErrorSwal, SuccessSwal } from "../../../utils/allSwalFire";
+import { RxCross2 } from "react-icons/rx";
+import { RxInfoCircled } from "react-icons/rx";
 
 export default function Professional() {
   const navigate = useNavigate();
@@ -104,7 +106,7 @@ export default function Professional() {
 
     const payload = {
       professionalId: reviewProfessional?._id || reviewProfessional?.id,
-      reviewerType,
+      reviewerType: "admin",
       rating,
       comment: detailReview,
     };
@@ -208,15 +210,15 @@ export default function Professional() {
         <div className="flex gap-4">
           <button
             onClick={() => showDeleteModal(record)}
-            className="text-red-500 rounded-full bg-[#FDFAF3] p-1 border"
+            className="text-red-500 rounded-full bg-[#FDFAF3] p-1 m-0"
           >
-            <RiDeleteBin6Line size={16} />
+            <RiDeleteBin6Line size={20} />
           </button>
           <button
             onClick={() => navigate(`/all-users/professional/${record.key}`)}
-            className="text-[#883DBD] rounded-full bg-[#FDFAF3] p-1 border"
+            className="text-[#883DBD] rounded-full bg-[#FDFAF3] p-1 m-0"
           >
-            <BsInfoCircle size={16} />
+            <RxInfoCircled size={20} />
           </button>
         </div>
       ),
@@ -226,7 +228,7 @@ export default function Professional() {
   return (
     <div className="mx-auto">
       {/* total professionals */}
-      <div className="border border-black shadow-lg rounded flex justify-start items-center gap-4 p-4 my-4">
+      <div className="border primary-border shadow-lg rounded flex justify-start items-center gap-4 p-4 my-4">
         <div className="bg-primary p-4 rounded text-white">
           <FaUserCog size={32} />
         </div>
@@ -238,7 +240,7 @@ export default function Professional() {
         </div>
       </div>
       {/* below content */}
-      <div className="border shadow-sm rounded-lg">
+      <div className="border border-[#E4E5E8] rounded-lg">
         <div className="flex justify-between items-center p-4">
           <h3 className="text-2xl">Professional’s List</h3>
           <div className="flex justify-around gap-4">
@@ -270,7 +272,7 @@ export default function Professional() {
           columns={columns}
           dataSource={tableData}
           loading={isLoading}
-          className="shadow-md rounded"
+          className="rounded-lg"
           pagination={{
             pageSize: limit,
             total: totalProfessionals,
@@ -290,6 +292,7 @@ export default function Professional() {
         open={isReviewModalOpen}
         onCancel={handleReviewCancel}
         centered
+        closable={false}
         footer={null}
         className="review-modal-custom"
         width={400}
@@ -307,6 +310,16 @@ export default function Professional() {
           }}
           className="mt-6"
         >
+          <div
+            onClick={handleReviewCancel}
+            className="absolute top-0.5 right-0.5 w-9 h-9 bg-red-500 flex items-center justify-center cursor-pointer"
+            style={{
+              borderBottomLeftRadius: "1.25rem",
+              borderTopRightRadius: "0.5rem",
+            }}
+          >
+            <RxCross2 className="text-white text-xl" />
+          </div>
           <Form.Item
             name="rating"
             rules={[{ required: true, message: "Please give a star rating!" }]}
@@ -321,12 +334,12 @@ export default function Professional() {
             </div>
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label={<div className="font-semibold">Reviewer Type</div>}
             name="reviewerType"
           >
             <Input readOnly />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label={<div className="font-semibold">Detail Review</div>}
@@ -336,6 +349,7 @@ export default function Professional() {
             ]}
           >
             <TextArea
+              className="border border-[#B0B0B0] focus:border-primary hover:border-primary"
               rows={4}
               placeholder="Write your detailed review here..."
             />
@@ -346,7 +360,7 @@ export default function Professional() {
               loading={isReviewLoading}
               type="primary"
               htmlType="submit"
-              className="w-full h-12 bg-primary text-white border-none rounded-lg text-lg font-semibold"
+              className="w-full h-12 mt-3 bg-primary text-white border-none rounded-lg text-lg font-semibold"
             >
               Send Review
             </Button>
@@ -358,6 +372,7 @@ export default function Professional() {
       <Modal
         open={isDeleteModalOpen}
         onCancel={handleDeleteCancel}
+        closable={false}
         centered
         footer={[
           <div className="flex justify-center gap-4" key="delete-footer">
@@ -378,6 +393,16 @@ export default function Professional() {
           </div>,
         ]}
       >
+        <div
+          onClick={handleDeleteCancel}
+          className="absolute top-0.5 right-0.5 w-9 h-9 bg-red-500 flex items-center justify-center cursor-pointer"
+          style={{
+            borderBottomLeftRadius: "1.25rem",
+            borderTopRightRadius: "0.5rem",
+          }}
+        >
+          <RxCross2 className="text-white text-xl" />
+        </div>
         {selectedProfessional && (
           <div className="space-y-4 mt-4 text-center">
             <p className="text-lg">
