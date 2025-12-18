@@ -8,7 +8,7 @@ const Main = () => {
       <div role="navigation">
         <Sidebar />
       </div>
-      <main className="flex-1 pl-[326px]">
+      <main className="flex-1 pl-[270px]">
         <div className="sticky top-0 w-full pl-[24px] z-10 bg-white">
           <Header />
         </div>

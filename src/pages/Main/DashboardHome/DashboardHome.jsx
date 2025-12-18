@@ -89,8 +89,8 @@ export default function DashboardHome() {
       <>
         <img src={icon} className="w-12 h-12" alt="icon" />
         <div>
-          <div className="2xl:text-xl text-base font-medium roboto ">{title}</div>
-          <div className="text-3xl font-bold roboto">{number}</div>
+          <div className="2xl:text-xl text-base font-medium roboto mb-3">{title}</div>
+          <div className="2xl:text-3xl text-2xl font-bold roboto">{number}</div>
         </div>
       </>
     );
@@ -100,7 +100,7 @@ export default function DashboardHome() {
     <>
       <div className="space-y-2 md:space-y-4 lg:space-y-6 mt-8">
         <div className="flex gap-9 w-full">
-          <div className="w-[60%] border border-[#700000EB] rounded-lg drop-shadow drop-shadow-[#0000001A]">
+          <div className="w-[60%] primary-border rounded-lg drop-shadow-[#0000001A]">
             <DashboardChart />
           </div>
           <div className="flex justify-center rounded-lg w-[40%]">
