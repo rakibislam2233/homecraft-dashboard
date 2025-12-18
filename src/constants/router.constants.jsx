@@ -1,8 +1,5 @@
-import { CiSettings, CiUser } from "react-icons/ci";
-import { FaServicestack, FaUser } from "react-icons/fa6";
-import { MdOutlineSecurityUpdateWarning } from "react-icons/md";
-import { PiUsersThree, PiUsersThreeFill } from "react-icons/pi";
-import { RiDashboardHorizontalFill } from "react-icons/ri";
+import { CiSettings, CiUser } from "react-icons/ci"; 
+import { PiUsersThreeFill } from "react-icons/pi"; 
 import { TbAirConditioning } from "react-icons/tb";
 import AccountVarification from "../pages/Main/AccountVarification/AccountVarification";
 import Professional from "../pages/Main/AllUsers/Professional";
@@ -25,12 +22,24 @@ import EditTermsConditions from "../pages/Settings/EditTermsConditions";
 import PrivacyPolicy from "../pages/Settings/PrivacyPolicy";
 import TermsConditions from "../pages/Settings/TermsConditions";
 import Subscription from "./../pages/Main/Subscription/Subscription";
+import { RiDashboardLine } from "react-icons/ri";
+import { HiSquare2Stack } from "react-icons/hi2";
+import { TbCategoryPlus } from "react-icons/tb";
+import { AiOutlineQuestionCircle, AiFillDollarCircle, } from "react-icons/ai";
+import { MdOutlinePrivacyTip } from "react-icons/md";
+import { PiCrownSimpleLight } from "react-icons/pi";
+import { HiOutlineSupport } from "react-icons/hi";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { HiChatBubbleLeftRight  } from "react-icons/hi2";
+import { FiAlertCircle } from "react-icons/fi";
+import { HiDocumentReport } from "react-icons/hi";
+import { RiUser3Fill } from "react-icons/ri";
 
 export const dashboardItems = [
   {
     name: "Dashboard",
     path: "/",
-    icon: RiDashboardHorizontalFill,
+    icon: RiDashboardLine,
     element: <DashboardHome />,
   },
   {
@@ -46,13 +55,13 @@ export const dashboardItems = [
       {
         name: "Client/Users",
         path: "all-users/users",
-        icon: FaUser,
+        icon: RiUser3Fill,
         element: <Users />,
       },
 
       {
         name: "Professional",
-        icon: FaUser,
+        icon: RiUser3Fill,
         path: "all-users/professional",
         element: <Professional />,
       },
@@ -66,49 +75,49 @@ export const dashboardItems = [
   {
     name: "A.C Varification",
     path: "account-varification",
-    icon: PiUsersThree,
+    icon: HiSquare2Stack,
     element: <AccountVarification />,
   },
   {
     name: "Category",
     path: "category",
-    icon: PiUsersThree,
+    icon: TbCategoryPlus,
     element: <CategoryNew />,
   },
 
   {
     name: "Earning",
     path: "earning",
-    icon: PiUsersThree,
+    icon: AiFillDollarCircle,
     element: <EarningNew />,
   },
   {
     name: "Subscription",
     path: "subscription",
-    icon: PiUsersThree,
+    icon: PiCrownSimpleLight,
     element: <Subscription />,
   },
   {
     name: "Support",
     rootPath: "support",
-    icon: PiUsersThree,
+    icon: HiOutlineSupport,
     children: [
       {
         name: "User Message",
         path: "support/user-message",
-        icon: CiUser,
+        icon: IoChatbubbleEllipsesOutline,
         element: <UserMessage />,
       },
       {
         name: "Prof. Message",
         path: "support/professional-message",
-        icon: CiUser,
+        icon: HiChatBubbleLeftRight,
         element: <ProfessionalMessage />,
       },
       {
         name: "Report",
         path: "support/report",
-        icon: CiUser,
+        icon: HiDocumentReport ,
         element: <Report />,
       },
     ],
@@ -128,19 +137,10 @@ export const dashboardItems = [
         path: "settings/profile/edit",
         element: <EditMyProfile />,
       },
-      {
-        name: "About Us",
-        icon: FaServicestack,
-        path: "settings/about-us",
-        element: <About />,
-      },
-      {
-        path: "settings/about-us/edit",
-        element: <EditAbout />,
-      },
+
       {
         name: "Terms & Services",
-        icon: TbAirConditioning,
+        icon: FiAlertCircle,
         path: "settings/terms-conditions",
         element: <TermsConditions />,
       },
@@ -150,13 +150,23 @@ export const dashboardItems = [
       },
       {
         name: "Privacy Policy",
-        icon: MdOutlineSecurityUpdateWarning,
+        icon: MdOutlinePrivacyTip,
         path: "settings/privacy-policy",
         element: <PrivacyPolicy />,
       },
       {
         path: "settings/privacy-policy/edit",
         element: <EditPrivacyPolicy />,
+      },
+      {
+        name: "About Us",
+        icon: AiOutlineQuestionCircle,
+        path: "settings/about-us",
+        element: <About />,
+      },
+      {
+        path: "settings/about-us/edit",
+        element: <EditAbout />,
       },
     ],
   },

@@ -8,11 +8,13 @@ import { dashboardItems } from "../../constants/router.constants";
 import { cn } from "../../lib/utils";
 import { logout } from "../../redux/slices/authSlice";
 import { routeLinkGenerators } from "../../utils/routeLinkGenerators";
+import { IoIosArrowDown } from "react-icons/io";
+import logout_image from "../../assets/dashboard/logout.svg";
 
 const SubMenu = ({ children, isOpen, rootPath, location, openName, name }) => (
   <div
-    className={cn("pl-8 pr-6 space-y-0.5 h-0 overflow-hidden", {
-      "h-fit pt-1":
+    className={cn("pl-8 space-y-1 h-0 overflow-hidden", {
+      "h-fit pt-1.5":
         name === openName?.name ||
         (location.pathname.includes(rootPath) && !openName.name),
     })}
@@ -23,11 +25,13 @@ const SubMenu = ({ children, isOpen, rootPath, location, openName, name }) => (
         to={subPath}
         className={({ isActive }) =>
           isActive
-            ? "bg-white text-primary w-full px-4 py-1 flex items-center justify-start gap-3 transition-all rounded-lg"
-            : "text-white hover:text-primary hover:bg-white w-full px-4 py-1 flex items-center justify-start gap-3 transition-all rounded-lg"
+            ? "bg-white text-primary w-full px-4 py-1 flex items-center justify-start gap-2.5 transition-all text-lg"
+            : "text-white hover:text-primary hover:bg-white w-full px-4 py-1 flex items-center justify-start gap-2.5 transition-all text-lg"
         }
       >
-        <div>{createElement(subIcon, { size: "17" })}</div>
+        <div>
+          {createElement(subIcon, { size: "22", className: "font-bold" })}
+        </div>
         <span>{subName}</span>
       </NavLink>
     ))}
@@ -58,7 +62,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-[326px] min-h-screen h-full">
+    <div className="fixed top-0 left-0 w-[270px] min-h-screen h-full">
       <div className="h-full flex flex-col justify-between bg-gradient-to-b from-[#8E0003] to-[#4D0304] pt-[50px] border drop-shadow rounded-lg">
         {/* Logo */}
         <div className=" flex justify-center items-center text-primary text-3xl font-bold">
@@ -67,7 +71,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className="mt-10 max-h-[650px] overflow-y-auto space-y-1 xl:space-y-2 px-4 text-white">
+        <ul className="mt-10 max-h-[680px] overflow-y-auto space-y-5 text-white">
           {routeLinkGenerators(dashboardItems).map(
             ({ name, icon, path, children, rootPath }, indx) =>
               children?.length ? (
@@ -80,22 +84,22 @@ const Sidebar = () => {
                       }))
                     }
                     className={cn(
-                      "outline-none hover:text-primary hover:bg-white w-full px-4 py-3 flex items-center justify-between gap-3 text-lg transition-all rounded-lg",
+                      "outline-none hover:text-primary hover:bg-white w-full px-4 py-2.5 flex items-center justify-between gap-2.5 text-lg transition-all ",
                       {
-                        "bg-white text-primary":
+                        "bg-white text-primary py-2.5":
                           name === openName?.name ||
                           (location.pathname.includes(rootPath) &&
                             !openName.name),
                       }
                     )}
                   >
-                    <div className="flex items-center justify-start gap-3">
-                      <div>{createElement(icon, { size: "20" })}</div>
+                    <div className="flex items-center justify-start gap-3 w-full text-xl">
+                      <div>{createElement(icon, { size: "28" })}</div>
                       <span>{name}</span>
                     </div>
-                    <MdOutlineArrowRight
-                      className={cn("text-white", {
-                        "rotate-90 text-primary":
+                    <IoIosArrowDown
+                      className={cn(" hover:text-primary", {
+                        "rotate-180 text-primary ":
                           name === openName?.name ||
                           (location.pathname.includes(rootPath) &&
                             !openName.name),
@@ -113,13 +117,13 @@ const Sidebar = () => {
                   />
                 </li>
               ) : (
-                <li key={indx}>
+                <li key={indx} className="w-full">
                   <NavLink
                     to={path}
                     className={({ isActive }) =>
                       isActive
-                        ? "bg-white text-primary w-full px-4 py-3 flex items-center justify-start gap-3 text-lg transition-all rounded-lg"
-                        : "hover:text-primary text-[20px] hover:bg-white w-full px-4 py-2 flex items-center justify-start gap-3 text-lg transition-all rounded-lg"
+                        ? "bg-white text-primary w-full px-4 py-2.5 flex items-center justify-start gap-3 text-xl transition-all "
+                        : "hover:text-primary text-[20px] hover:bg-white w-full px-4 py-2.5 flex items-center justify-start gap-3 text-lg transition-all text-xl"
                     }
                   >
                     <div>{createElement(icon, { size: "20" })}</div>
@@ -131,12 +135,12 @@ const Sidebar = () => {
         </ul>
 
         {/* Logout Button */}
-        <div className="p-[24px]">
+        <div className="py-1 px-4">
           <button
             onClick={handleLogOut}
-            className="bg-white text-primary w-full px-10 py-4 flex justify-center items-center gap-2 rounded-lg text-xl"
+            className="text-white hover:text-white/90 [transition:0.5s] w-full flex items-center gap-2.5 text-xl mb-5"
           >
-            <BiLogOut className="text-white" size={20} />
+            <img src={logout_image} className="w-8 h-8" alt="icon" />
             <span>Logout</span>
           </button>
         </div>
