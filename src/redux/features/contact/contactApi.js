@@ -4,7 +4,7 @@ export const contactApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getContacts: builder.query({
       query: ({ page = 1, limit = 10 }) => ({
-        url: `/contact/all`,
+        url: `/api/v1/contact/all`,
         method: "GET",
         params: {
           page,
@@ -16,7 +16,7 @@ export const contactApi = baseApi.injectEndpoints({
 
     getContactDetails: builder.query({
       query: (id) => ({
-        url: `/contact/single/${id}`,
+        url: `/api/v1/contact/single/${id}`,
         method: "GET",
       }),
       providesTags: ["contact"],

@@ -5,7 +5,7 @@ export const earningApi = baseApi.injectEndpoints({
     // client page
     getEarningHistory: builder.query({
       query: ({ page = 1, limit = 10, name, date }) => ({
-        url: "/payment/history",
+        url: "/api/v1/payment/history",
         method: "GET",
         params: {
           page,
@@ -19,7 +19,7 @@ export const earningApi = baseApi.injectEndpoints({
 
     getSessionCharge: builder.query({
       query: () => ({
-        url: "/charge",
+        url: "/api/v1/charge",
         method: "GET",
       }),
       providesTags: ["earning"],
@@ -29,7 +29,7 @@ export const earningApi = baseApi.injectEndpoints({
     //  edit category
     updateSessionCharge: builder.mutation({
       query: (data) => ({
-        url: `/charge/update`,
+        url: `/api/v1/charge/update`,
         method: "PATCH",
         body: data,
       }),

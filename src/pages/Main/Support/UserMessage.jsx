@@ -1,240 +1,137 @@
 import { MoreVertical, Search, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import user_image from "../../../assets/images/dashboard-profile.png";
+import {
+  getOnlineUsers,
+  addOnlineStatusListener,
+} from "./../../../socket/socket";
+import { useSelector } from "react-redux";
+import {
+  fetchSupportConversationList,
+  fetchSupportMessages,
+  adminReplySupportMessage,
+} from "./../../../socket/messageService";
 
 export default function UserMessage() {
+  const [users, setUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState(new Set());
+  const [conversationsData, setConversationsData] = useState(null);
+  const messagesEndRef = useRef(null);
+  const currentUser = useSelector((state) => state.auth.user);
 
-  // Sample users data
-  const users = [
-    {
-      id: 2,
-      name: "Darrell Steward",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: true,
-      hasNewMessage: false,
-      lastSeen: "5 hours ago",
-      unreadCount: 4,
-    },
-    {
-      id: 29,
-      name: "Darrell Steward",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "5 hours ago",
-      unreadCount: 4,
-    },
-    {
-      id: 82,
-      name: "Darrell Steward",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: true,
-      hasNewMessage: false,
-      lastSeen: "5 hours ago",
-      unreadCount: 4,
-    },
-    {
-      id: 4,
-      name: "Kristin Watson",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "3 hours ago",
-      unreadCount: 0,
-    },
-    {
-      id: 5,
-      name: "Devon Lane",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: true,
-      hasNewMessage: true,
-      lastSeen: "30 minutes ago",
-      unreadCount: 2,
-    },
-    {
-      id: 411,
-      name: "Kristin Watson",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "3 hours ago",
-      unreadCount: 0,
-    },
-    {
-      id: 511,
-      name: "Devon Lane",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: true,
-      hasNewMessage: true,
-      lastSeen: "30 minutes ago",
-      unreadCount: 2,
-    },
-    {
-      id: 6,
-      name: "Esther Howard",
-      avatar:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "6 hours ago",
-      unreadCount: 0,
-    },
-    {
-      id: 7,
-      name: "Julie Jones",
-      avatar:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "2 days ago",
-      unreadCount: 0,
-    },
-    {
-      id: 26,
-      name: "Esther Howard",
-      avatar:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "6 hours ago",
-      unreadCount: 0,
-    },
-    {
-      id: 27,
-      name: "Julie Jones",
-      avatar:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "2 days ago",
-      unreadCount: 0,
-    },
-    {
-      id: 8,
-      name: "Ronald Richards",
-      avatar:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "1 day ago",
-      unreadCount: 0,
-    },
-    {
-      id: 9,
-      name: "Robert Fox",
-      avatar:
-        "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "4 hours ago",
-      unreadCount: 0,
-    },
-    {
-      id: 10,
-      name: "Ahmad Kabir",
-      avatar:
-        "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=40&h=40&fit=crop&crop=face",
-      lastMessage: "hi, can you tell me ab...",
-      isOnline: false,
-      hasNewMessage: false,
-      lastSeen: "8 hours ago",
-      unreadCount: 0,
-    },
-  ];
+  // Fetch conversations once on mount
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const res = await fetchSupportConversationList();
+        // console.log("res : ", res);
+        setConversationsData(res);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchConversations();
+  }, []);
 
-  // Sample messages for Henry Silver
-  const messages = [
-    {
-      id: 1,
-      text: "Hi, I'm looking to get my backyard pool cleaned. Do you offer that service?",
-      sender: "user",
-      timestamp: "Yesterday, 9:00 PM",
-      status: "delivered",
-    },
-    {
-      id: 2,
-      text: "Yes, we do offer pool cleaning services! I'd be happy to help you with that.",
-      sender: "admin",
-      timestamp: "Yesterday, 9:02 PM",
-      status: "read",
-    },
-    {
-      id: 3,
-      text: "Great! What are your rates and how often do you recommend cleaning?",
-      sender: "user",
-      timestamp: "Yesterday, 9:05 PM",
-      status: "delivered",
-    },
-    {
-      id: 4,
-      text: "Our standard cleaning is $120 per session. For regular maintenance, we recommend weekly cleaning during summer and bi-weekly during winter.",
-      sender: "admin",
-      timestamp: "Yesterday, 9:07 PM",
-      status: "read",
-    },
-    {
-      id: 5,
-      text: "That sounds reasonable. Can you schedule a visit this week?",
-      sender: "user",
-      timestamp: "Yesterday, 9:10 PM",
-      status: "delivered",
-    },
-    {
-      id: 41,
-      text: "Our standard cleaning is $120 per session. For regular maintenance, we recommend weekly cleaning during summer and bi-weekly during winter.",
-      sender: "admin",
-      timestamp: "Yesterday, 9:07 PM",
-      status: "read",
-    },
-    {
-      id: 51,
-      text: "That sounds reasonable. Can you schedule a visit this week?",
-      sender: "user",
-      timestamp: "Yesterday, 9:10 PM",
-      status: "delivered",
-    },
-  ];
+  // console.log("conversationsData", conversationsData);
+  // console.log("users : ", users);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      console.log("Sending message:", newMessage);
-      setNewMessage("");
+  // Update users sidebar when conversations or online users change
+  useEffect(() => {
+    if (!conversationsData) return;
+
+    const mappedUsers = conversationsData.results.map((conv) => {
+      const user = conv.userId;
+      // console.log("user : ", user);
+      return {
+        id: user.id,
+        name: user.profile.fullName,
+        email: user.email,
+        avatar: user.profile.profileImage,
+        isOnline: onlineUsers.has(user.id), // reactive
+        unreadCount: conv.unreadByAdmin,
+        lastMessage: conv.lastMessage || "No messages yet",
+        lastMessageAt: conv.lastMessageAt,
+        conversationId: conv._id,
+      };
+    });
+
+    setUsers(mappedUsers);
+  }, [conversationsData, onlineUsers]);
+
+  // Subscribe to online users via socket
+  useEffect(() => {
+    const unsubscribe = addOnlineStatusListener(() => {
+      setOnlineUsers(new Set(getOnlineUsers()));
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Load messages for a selected user
+  const loadMessages = async (conversation) => {
+    setSelectedUser(conversation);
+    try {
+      const res = await fetchSupportMessages(conversation.conversationId);
+      setMessages(res.results || res);
+    } catch (err) {
+      console.error(err);
     }
   };
+
+  // console.log("selectedUser : ", selectedUser);
+  // Send message handler
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !selectedUser) return;
+
+    try {
+      const sent = await adminReplySupportMessage({
+        conversationId: selectedUser.conversationId,
+        message: newMessage,
+      });
+
+      // Ensure the message has senderId = currentUser
+      const messageWithSender = {
+        ...sent,
+        senderId: currentUser, // important for correct alignment
+      };
+
+      setMessages((prev) => [...prev, messageWithSender]);
+      setNewMessage("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSendMessage();
-    }
+    if (e.key === "Enter") handleSendMessage();
   };
 
+  // Derive the selected user's online status from onlineUsers
+  const selectedUserWithStatus = selectedUser
+    ? { ...selectedUser, isOnline: onlineUsers.has(selectedUser.id) }
+    : null;
+
+  useEffect(() => {
+    const unsubscribe = addOnlineStatusListener(() => {
+      setOnlineUsers(new Set(getOnlineUsers())); // triggers re-render
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+    <div className="flex h-[calc(100vh-122px)] bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Users List Sidebar */}
       <div className="w-80 bg-white/80 backdrop-blur-sm border-r border-gray-200/50 flex flex-col shadow-lg">
-        {/* Sidebar Header */}
-        <div className="p-6 border-b border-gray-200/50 ">
+        <div className="p-6 border-b border-gray-200/50">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
@@ -245,16 +142,15 @@ export default function UserMessage() {
           </div>
         </div>
 
-        {/* Users List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 space-y-2 overflow-y-auto">
           {users.map((user) => (
             <div
               key={user.id}
-              onClick={() => setSelectedUser(user)}
-              className={`group flex items-center p-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 transform ${
+              onClick={() => loadMessages(user)}
+              className={`group flex  items-center p-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 cursor-pointer transition-all duration-200 transform ${
                 selectedUser?.id === user.id
-                  ? "bg-gradient-to-r from-gray-100 to-indigo-100 border-2 border-primary rounded"
-                  : "border-b border-gray-100/50"
+                  ? "bg-gradient-to-r from-gray-100 to-indigo-100 border border-primary rounded"
+                  : "border-b border-b-[#545454]/60"
               }`}
             >
               <div className="relative">
@@ -263,54 +159,57 @@ export default function UserMessage() {
                   alt={user.name}
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-md"
                 />
-                {user.isOnline && (
+                {onlineUsers.has(user.id) && (
                   <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 )}
+
+                {/* {user.isOnline && (
+                  <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                )} */}
               </div>
               <div className="ml-3 flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-gray-900 group-hover:text-primary">
                     {user.name}
                   </h3>
-                  {user.unreadCount > 0 && (
+                  {/* {user.unreadCount > 0 && (
                     <div className="bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-medium">
                       {user.unreadCount}
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <p className="text-sm text-gray-500 truncate group-hover:text-gray-600">
-                  {user.lastMessage}
+                  {user.lastMessage ? user.lastMessage : "No messages yet"}
                 </p>
               </div>
-              {/* <div
-                className={` ${
-                  user.isOnline
-                    ? "rounded-full p-2 border-2 border-gray-400 bg-primary"
-                    : "rounded-full p-2 border-2 border-gray-400 "
-                }  `}
-              ></div> */}
             </div>
           ))}
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col">
         {selectedUser ? (
           <>
             {/* Chat Header */}
             <div className="bg-white/90 backdrop-blur-sm border-b border-gray-200/50 p-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center">
                 <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                  src={selectedUser?.avatar}
                   alt="Henry Silver"
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-200 shadow-md"
                 />
                 <div className="ml-3">
-                  <h3 className="font-semibold text-gray-900">Henry Silver</h3>
-                  <p className="text-sm text-green-600 font-medium">
+                  <h3 className="font-semibold text-gray-900 capitalize">
+                    {selectedUser?.name}
+                  </h3>
+                  {/* {user.isOnline && (
+                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  )} */}
+
+                  {/* <p className="text-sm text-green-600 font-medium">
                     Active now
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -323,34 +222,40 @@ export default function UserMessage() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-gray-50/30 to-white/30">
               {messages.map((message, index) => (
-                <div key={message.id}>
+                <div key={message._id}>
                   {index === 0 ||
-                  messages[index - 1].timestamp !== message.timestamp ? (
+                  messages[index - 1].createdAt !== message.createdAt ? (
                     <div className="flex justify-center mb-4">
                       <span className="text-xs text-gray-500 bg-white/60 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-                        {message.timestamp}
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </span>
                     </div>
                   ) : null}
                   <div
                     className={`flex ${
-                      message.sender === "user"
-                        ? "justify-start"
-                        : "justify-end"
+                      message.senderId?._id === currentUser?._id
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-md transform transition-all duration-200 ${
-                        message.sender === "user"
-                          ? "bg-gradient-to-r from-gray-700 to-gray-600 text-white rounded-bl-sm"
-                          : "bg-gradient-to-r from-primary to-primary/90 text-white rounded-br-sm"
+                        message.senderId?._id === currentUser?._id
+                          ? "bg-gradient-to-r from-primary to-primary/90 text-white rounded-br-sm"
+                          : "bg-gradient-to-r from-gray-700 to-gray-600 text-white rounded-bl-sm"
                       }`}
                     >
-                      <p className="text-sm ">{message.text}</p>
+                      <p className="text-sm">{message.text}</p>
                     </div>
                   </div>
                 </div>
               ))}
+
+              {/* Scroll target - MUST be inside scrollable container */}
+              <div ref={messagesEndRef}></div>
             </div>
 
             {/* Message Input */}
@@ -390,6 +295,24 @@ export default function UserMessage() {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="w-80 bg-white/80 backdrop-blur-sm border-r border-gray-200/50 flex flex-col shadow-lg">
+        <div className="flex items-center justify-center text-center flex-col gap-5 h-full">
+          <div className="w-[84px] h-[84px]">
+            <img
+              src={user_image}
+              alt="user-image"
+              className="w-full h-full rounded-full shadow-sm border border-[#222222]"
+            />
+          </div>
+          <div className="">
+            <h3 className="text-xl font-normal text-[#222222] m-0">
+              {selectedUser?.name}
+            </h3>
+            <p className="text-xs text-[#2D9F94] m-0"> {selectedUser?.email}</p>
+          </div>
+        </div>
       </div>
 
       <style jsx>{`

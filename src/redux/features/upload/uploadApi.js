@@ -5,7 +5,7 @@ export const uploadApi = baseApi.injectEndpoints({
     //  upload file
     uploadFile: builder.mutation({
       query: (uploadData) => ({
-        url: "/uploded",
+        url: "/api/v1/uploded",
         method: "POST",
         body: uploadData,
       }),

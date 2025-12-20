@@ -5,7 +5,7 @@ export const bannerApi = baseApi.injectEndpoints({
     // get banner
     getAllBanner: builder.query({
       query: () => ({
-        url: "/banner",
+        url: "/api/v1/banner",
         method: "GET",
       }),
       providesTags: ["banner"],
@@ -14,7 +14,7 @@ export const bannerApi = baseApi.injectEndpoints({
     //  add category
     addBanner: builder.mutation({
       query: (addBannerData) => ({
-        url: "/banner/create",
+        url: "/api/v1/banner/create",
         method: "POST",
         body: addBannerData,
       }),
@@ -24,7 +24,7 @@ export const bannerApi = baseApi.injectEndpoints({
     //  edit category
     editBanner: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/banner/update?id=${id}`,
+        url: `/api/v1/banner/update?id=${id}`,
         method: "PATCH",
         body: data,
       }),
@@ -34,7 +34,7 @@ export const bannerApi = baseApi.injectEndpoints({
     // New delete community endpoint
     deleteBanner: builder.mutation({
       query: (id) => ({
-        url: `/banner/delete?id=${id}`,
+        url: `/api/v1/banner/delete?id=${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["banner"],

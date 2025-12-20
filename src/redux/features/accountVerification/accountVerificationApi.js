@@ -4,7 +4,7 @@ export const accountVerificationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUnverifiedProfessionals: builder.query({
       query: ({ page = 1, limit = 10, month, searchTerm }) => ({
-        url: "/users/unverified-professionals",
+        url: "/api/v1/users/unverified-professionals",
         method: "GET",
         params: {
           page,
@@ -18,7 +18,7 @@ export const accountVerificationApi = baseApi.injectEndpoints({
 
     verifyProfessional: builder.mutation({
       query: (id) => ({
-        url: `/users/verify-professional/${id}`,
+        url: `/api/v1/users/verify-professional/${id}`,
         method: "PATCH",
       }),
       invalidatesTags: ["unverifiedProfessionals"],
@@ -26,7 +26,7 @@ export const accountVerificationApi = baseApi.injectEndpoints({
 
     rejectProfessional: builder.mutation({
       query: (id) => ({
-        url: `/users/rejectProfessional/${id}`,
+        url: `/api/v1/users/rejectProfessional/${id}`,
         method: "PATCH",
       }),
       invalidatesTags: ["unverifiedProfessionals"],

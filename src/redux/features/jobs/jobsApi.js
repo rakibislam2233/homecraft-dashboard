@@ -5,7 +5,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // all beautician
     getJobs: builder.query({
       query: ({ page = 1, limit = 10 }) => ({
-        url: `/job/all`,
+        url: `/api/v1/job/all`,
         method: "GET",
         params: {
           page,
@@ -17,7 +17,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // get beautician by id
     getJobDetails: builder.query({
       query: (id) => ({
-        url: `/job/single/${id}`,
+        url: `/api/v1/job/single/${id}`,
         method: "GET",
       }),
       providesTags: ["jobs"],
@@ -25,7 +25,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // all beautician
     getJobApplicants: builder.query({
       query: ({ id, date, page = 1, limit = 10 }) => ({
-        url: `/apply/all/${id}`,
+        url: `/api/v1/apply/all/${id}`,
         method: "GET",
         params: {
           date,
@@ -38,7 +38,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // get beautician by id
     getJobApplicantDetails: builder.query({
       query: (id) => ({
-        url: `/apply/single/${id}`,
+        url: `/api/v1/apply/single/${id}`,
         method: "GET",
       }),
       providesTags: ["jobs"],
@@ -48,7 +48,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // post jobs
     postJob: builder.mutation({
       query: (jobData) => ({
-        url: "/job/create",
+        url: "/api/v1/job/create",
         method: "POST",
         body: jobData,
       }),
@@ -57,7 +57,7 @@ export const jobsApi = baseApi.injectEndpoints({
     // update jobs
     updateJob: builder.mutation({
       query: ({ id, jobData }) => ({
-        url: `/job/update/${id}`,
+        url: `/api/v1/job/update/${id}`,
         method: "POST",
         body: jobData,
       }),
@@ -66,7 +66,7 @@ export const jobsApi = baseApi.injectEndpoints({
 
     deleteJob: builder.mutation({
       query: ({ id }) => ({
-        url: `/job/delete/${id}`,
+        url: `/api/v1/job/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["jobs"],

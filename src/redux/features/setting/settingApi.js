@@ -5,7 +5,7 @@ export const settingsApi = baseApi.injectEndpoints({
     // about  start
     getAbout: builder.query({
       query: () => ({
-        url: "/settings/about-us",
+        url: "/api/v1/settings/about-us",
         method: "GET",
       }),
       providesTags: ["settings"],
@@ -13,7 +13,7 @@ export const settingsApi = baseApi.injectEndpoints({
 
     updateAbout: builder.mutation({
       query: ({ data }) => ({
-        url: `/settings/about-us`,
+        url: `/api/v1/settings/about-us`,
         method: "POST",
         body: data,
       }),
@@ -25,7 +25,7 @@ export const settingsApi = baseApi.injectEndpoints({
     //  terms start
     getTerms: builder.query({
       query: () => ({
-        url: "/settings/terms-conditions",
+        url: "/api/v1/settings/terms-conditions",
         method: "GET",
       }),
       providesTags: ["settings"],
@@ -33,7 +33,7 @@ export const settingsApi = baseApi.injectEndpoints({
 
     updateTerms: builder.mutation({
       query: ({ data }) => ({
-        url: `/settings/terms-conditions`,
+        url: `/api/v1/settings/terms-conditions`,
         method: "POST",
         body: data,
       }),
@@ -44,7 +44,7 @@ export const settingsApi = baseApi.injectEndpoints({
     // privacy start
     getPrivacy: builder.query({
       query: () => ({
-        url: "/settings/privacy-policy",
+        url: "/api/v1/settings/privacy-policy",
         method: "GET",
       }),
       providesTags: ["settings"],
@@ -52,7 +52,7 @@ export const settingsApi = baseApi.injectEndpoints({
 
     updatePrivacy: builder.mutation({
       query: ({ data }) => ({
-        url: `/settings/privacy-policy`,
+        url: `/api/v1/settings/privacy-policy`,
         method: "POST",
         body: data,
       }),

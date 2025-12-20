@@ -4,7 +4,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSubscriptions: builder.query({
       query: ({ page = 1, limit = 10 }) => ({
-        url: "/subscriptions",
+        url: "/api/v1/subscriptions",
         method: "GET",
         params: { page, limit },
       }),
@@ -13,7 +13,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
 
     createSubscription: builder.mutation({
       query: (payload) => ({
-        url: "/subscriptions",
+        url: "/api/v1/subscriptions",
         method: "POST",
         body: payload,
       }),
@@ -22,7 +22,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
 
     updateSubscription: builder.mutation({
       query: ({ id, payload }) => ({
-        url: `/subscriptions/${id}`,
+        url: `/api/v1/subscriptions/${id}`,
         method: "PATCH",
         body: payload,
       }),
