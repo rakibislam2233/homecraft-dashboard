@@ -6,7 +6,7 @@ export const communityApi = baseApi.injectEndpoints({
     getAllCommunity: builder.query({
       //   query: ({ page = 1, limit = 10 }) => ({
       query: () => ({
-        url: `/community`,
+        url: `/api/v1/community`,
         method: "GET",
         // params: {
         //   page,
@@ -18,7 +18,7 @@ export const communityApi = baseApi.injectEndpoints({
     // get beautician by id
     getCommunityById: builder.query({
       query: (communityId) => ({
-        url: `/community/details?communityId=${communityId}`,
+        url: `/api/v1/community/details?communityId=${communityId}`,
         method: "GET",
       }),
       providesTags: ["community"],
@@ -27,7 +27,7 @@ export const communityApi = baseApi.injectEndpoints({
     // New delete community endpoint
     deleteCommunity: builder.mutation({
       query: (communityId) => ({
-        url: `/community/delete?communityId=${communityId}`,
+        url: `/api/v1/community/delete?communityId=${communityId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["community"],

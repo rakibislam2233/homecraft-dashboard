@@ -5,7 +5,7 @@ export const dashboardHomeApi = baseApi.injectEndpoints({
     // DashboardHome page
     getAllStats: builder.query({
       query: () => ({
-        url: `/dashboard/over-view`,
+        url: `/api/v1/dashboard/over-view`,
         method: "GET",
       }),
       providesTags: ["dashboard"],
@@ -14,7 +14,7 @@ export const dashboardHomeApi = baseApi.injectEndpoints({
     // Earning in DashboardHome page
     getApplicants: builder.query({
       query: (year) => ({
-        url: `/dashboard/${year}`,
+        url: `/api/v1/dashboard/${year}`,
         method: "GET",
       }),
       providesTags: ["dashboard"],

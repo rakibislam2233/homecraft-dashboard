@@ -4,7 +4,7 @@ export const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: ({ page = 1, limit = 10 }) => ({
-        url: "/categories",
+        url: "/api/v1/categories",
         method: "GET",
         params: { page, limit },
       }),
@@ -13,7 +13,7 @@ export const categoryApi = baseApi.injectEndpoints({
 
     addCategory: builder.mutation({
       query: (formData) => ({
-        url: "/categories",
+        url: "/api/v1/categories",
         method: "POST",
         body: formData,
       }),
@@ -22,7 +22,7 @@ export const categoryApi = baseApi.injectEndpoints({
 
     updateCategory: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `/categories/${id}`,
+        url: `/api/v1/categories/${id}`,
         method: "PATCH",
         body: formData,
       }),
@@ -31,7 +31,7 @@ export const categoryApi = baseApi.injectEndpoints({
 
     deleteCategory: builder.mutation({
       query: (id) => ({
-        url: `/categories/${id}`,
+        url: `/api/v1/categories/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["categories"],

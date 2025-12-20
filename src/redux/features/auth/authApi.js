@@ -5,20 +5,20 @@ export const authApi = baseApi.injectEndpoints({
     // 01. login
     login: builder.mutation({
       query: (loginData) => ({
-        url: "/auth/login",
+        url: "/api/v1/auth/login",
         method: "POST",
         body: loginData,
       }),
     }),
     // for protectet routes
     getUserByToken: builder.query({
-      query: () => ({ url: `/users/profile/me`, method: "GET" }),
+      query: () => ({ url: `/api/v1/users/profile/me`, method: "GET" }),
       providesTags: ["auth"],
     }),
 
     updateUser: builder.mutation({
       query: (data) => ({
-        url: `/users/profile/update`,
+        url: `/api/v1/users/profile/update`,
         method: "PATCH",
         body: data,
       }),
@@ -29,7 +29,7 @@ export const authApi = baseApi.injectEndpoints({
     forgotPassword: builder.mutation({
       query: (data) => {
         return {
-          url: `/auth/forgot-password`,
+          url: `/api/v1/auth/forgot-password`,
           method: "POST",
           body: data,
         };
@@ -41,7 +41,7 @@ export const authApi = baseApi.injectEndpoints({
     verifyEmail: builder.mutation({
       query: ({ code, email }) => {
         return {
-          url: `/auth/verify-otp`,
+          url: `/api/v1/auth/verify-otp`,
           method: "POST",
           body: { otp: code, email },
         };
@@ -53,7 +53,7 @@ export const authApi = baseApi.injectEndpoints({
     resetPassword: builder.mutation({
       query: ({ email, newPassword }) => {
         return {
-          url: `/auth/reset-password`,
+          url: `/api/v1/auth/reset-password`,
           method: "POST",
           body: { email, newPassword },
         };
@@ -64,7 +64,7 @@ export const authApi = baseApi.injectEndpoints({
     // 05. resend otp
     resendOtp: builder.query({
       query: ({ email }) => ({
-        url: `/auth/resend-otp`,
+        url: `/api/v1/auth/resend-otp`,
         method: "POST",
         body: { email },
       }),
@@ -75,7 +75,7 @@ export const authApi = baseApi.injectEndpoints({
     changePassword: builder.mutation({
       query: (data) => {
         return {
-          url: `/auth/change-password`,
+          url: `/api/v1/auth/change-password`,
           method: "POST",
           body: data,
         };

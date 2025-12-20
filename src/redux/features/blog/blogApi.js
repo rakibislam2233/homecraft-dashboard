@@ -67,7 +67,7 @@ export const blogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getBlogs: builder.query({
       query: ({ page = 1, limit = 10 }) => ({
-        url: `/blog/all`,
+        url: `/api/v1/blog/all`,
         method: "GET",
         params: { page, limit },
       }),
@@ -76,7 +76,7 @@ export const blogApi = baseApi.injectEndpoints({
 
     getBlogDetails: builder.query({
       query: (id) => ({
-        url: `/blog/single/${id}`,
+        url: `/api/v1/blog/single/${id}`,
         method: "GET",
       }),
       providesTags: ["blogs"],
@@ -84,7 +84,7 @@ export const blogApi = baseApi.injectEndpoints({
 
     postBlog: builder.mutation({
       query: (blogData) => ({
-        url: "/blog/create",
+        url: "/api/v1/blog/create",
         method: "POST",
         body: blogData,
       }),
@@ -93,7 +93,7 @@ export const blogApi = baseApi.injectEndpoints({
 
     updateBlog: builder.mutation({
       query: ({ id, blogData }) => ({
-        url: `/blog/edit/${id}`,
+        url: `/api/v1/blog/edit/${id}`,
         method: "POST",
         body: blogData,
       }),
@@ -102,7 +102,7 @@ export const blogApi = baseApi.injectEndpoints({
 
     deleteBlog: builder.mutation({
       query: ({ id }) => ({
-        url: `/blog/delete/${id}`,
+        url: `/api/v1/blog/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["blogs"],

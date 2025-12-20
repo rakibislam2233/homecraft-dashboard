@@ -5,7 +5,7 @@ export const valueApi = baseApi.injectEndpoints({
     // get value
     getValue: builder.query({
       query: (value) => ({
-        url: `/value/all/${value}`,
+        url: `/api/v1/value/all/${value}`,
         method: "GET",
         // params: {
         //   value,
@@ -17,7 +17,7 @@ export const valueApi = baseApi.injectEndpoints({
     //  add
     addValue: builder.mutation({
       query: ({ value, jobData }) => ({
-        url: `/value/create/${value}`,
+        url: `/api/v1/value/create/${value}`,
         method: "POST",
         body: jobData,
       }),
@@ -26,7 +26,7 @@ export const valueApi = baseApi.injectEndpoints({
     //  update
     updateValue: builder.mutation({
       query: ({ id, value, jobData }) => ({
-        url: `/value/update/${value}/${id}`,
+        url: `/api/v1/value/update/${value}/${id}`,
         method: "POST",
         body: jobData,
       }),
@@ -36,7 +36,7 @@ export const valueApi = baseApi.injectEndpoints({
     // delete
     deleteValue: builder.mutation({
       query: ({ id }) => ({
-        url: `/value/delete/${id}`,
+        url: `/api/v1/value/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["value"],

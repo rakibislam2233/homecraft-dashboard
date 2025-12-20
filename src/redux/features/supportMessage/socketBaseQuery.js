@@ -1,28 +1,20 @@
-import { initSocket } from "../../../socket/socketClient";
+// import { initSocket } from "../../../socket/socketClient";
 
-export const socketBaseQuery =
-  () =>
-  async ({ event, data }) => {
-    try {
-      const socket = initSocket();
+// export const socketBaseQuery =
+//   () =>
+//   async ({ event, data }, { dispatch }) => {
+//     return new Promise((resolve, reject) => {
+//       if (!window.socket) {
+//         reject({ error: "Socket not connected" });
+//         return;
+//       }
 
-      const response = await new Promise((resolve, reject) => {
-        socket.emit(event, data ?? {}, (res) => {
-          if (res?.success) {
-            resolve(res.data);
-          } else {
-            reject(res?.message || "Socket request failed");
-          }
-        });
-      });
-
-      return { data: response };
-    } catch (error) {
-      return {
-        error: {
-          status: "SOCKET_ERROR",
-          error: error,
-        },
-      };
-    }
-  };
+//       window.socket.emit(event, data, (response) => {
+//         if (response?.success === false) {
+//           reject({ error: response.message });
+//         } else {
+//           resolve({ data: response });
+//         }
+//       });
+//     });
+//   };

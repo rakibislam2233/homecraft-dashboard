@@ -1,4 +1,3 @@
- 
 import { baseApi } from "../../api/baseApi";
 
 export const userApi = baseApi.injectEndpoints({
@@ -6,7 +5,7 @@ export const userApi = baseApi.injectEndpoints({
     // user list
     getAllUser: builder.query({
       query: ({ page = 1, limit = 10, searchTerm, date }) => ({
-        url: `/users/clients`,
+        url: `/api/v1/users/clients`,
         method: "GET",
         params: {
           page,
@@ -20,7 +19,7 @@ export const userApi = baseApi.injectEndpoints({
 
     getAllProfessionals: builder.query({
       query: ({ page = 1, limit = 10, searchTerm, date }) => ({
-        url: `/users/professionals`,
+        url: `/api/v1/users/professionals`,
         method: "GET",
         params: {
           page,
@@ -34,7 +33,7 @@ export const userApi = baseApi.injectEndpoints({
 
     getProfessionalDetails: builder.query({
       query: (id) => ({
-        url: `/users/professionals/${id}`,
+        url: `/api/v1/users/professionals/${id}`,
         method: "GET",
       }),
       providesTags: ["user"],
@@ -43,7 +42,7 @@ export const userApi = baseApi.injectEndpoints({
     // review give api
     giveReview: builder.mutation({
       query: (payload) => ({
-        url: "/reviews",
+        url: "/api/v1/reviews",
         method: "POST",
         body: payload,
       }),
@@ -53,7 +52,7 @@ export const userApi = baseApi.injectEndpoints({
     // Fetch currently logged-in user's data
     getUserData: builder.query({
       query: () => ({
-        url: "/users/profile/me",
+        url: "/api/v1/users/profile/me",
         method: "GET",
       }),
       providesTags: ["auth"],
@@ -62,7 +61,7 @@ export const userApi = baseApi.injectEndpoints({
     // Update user data
     updateUserData: builder.mutation({
       query: (data) => ({
-        url: "/user/update",
+        url: "/api/v1/user/update",
         method: "POST",
         body: data,
       }),

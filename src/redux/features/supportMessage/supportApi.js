@@ -1,62 +1,45 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { socketBaseQuery } from "./socketBaseQuery";
+// import { createApi } from "@reduxjs/toolkit/query/react";
+// import { socketBaseQuery } from "./socketBaseQuery";
+// import { baseApi } from "./../../api/baseApi";
 
-export const supportApi = createApi({
-  reducerPath: "supportApi",
-  baseQuery: socketBaseQuery(),
-  tagTypes: ["Support", "Unread"],
-  endpoints: (builder) => ({
+// export const supportSocketApi = baseApi.injectEndpoints({
+//   endpoints: (builder) => ({
+//     /* Admin conversation list */
+//     getSupportConversationListSocket: builder.query({
+//       queryFn: (payload) =>
+//         socketBaseQuery()({
+//           event: "admin-support-conversation-list",
+//           data: payload,
+//         }),
+//     }),
 
-    // Get all support conversations
-    getAllSupportConversations: builder.query({
-      query: () => ({
-        event: "get-all-support-conversations",
-      }),
-      providesTags: ["Support"],
-    }),
+//     /* Admin get messages */
+//     getSupportMessagesSocket: builder.query({
+//       queryFn: (payload) =>
+//         socketBaseQuery()({
+//           event: "admin-get-support-messages",
+//           data: payload,
+//         }),
+//     }),
 
-    // Get support messages (admin / self)
-    getSupportMessages: builder.query({
-      query: ({ page = 1, limit = 50 }) => ({
-        event: "get-support-messages",
-        data: { page, limit },
-      }),
-      providesTags: ["Support"],
-    }),
+//     /* Admin reply */
+//     adminReplySupportSocket: builder.mutation({
+//       queryFn: (payload) =>
+//         socketBaseQuery()({
+//           event: "admin-reply-support-message",
+//           data: payload,
+//         }),
+//     }),
+//   }),
+// });
 
-    //  Get support messages by receiver
-    getSupportMessagesByReceiver: builder.query({
-      query: (receiverId) => ({
-        event: "get-support-messages-by-receiver",
-        data: { receiverId }, //  691819e9ce0dbf246c50b225
-      }),
-      providesTags: ["Support"],
-    }),
-
-    // Admin reply to support
-    adminReplySupport: builder.mutation({
-      query: (payload) => ({
-        event: "admin-reply-support",
-        data: payload,
-      }),
-      invalidatesTags: ["Support", "Unread"],
-    }),
-
-    // Get unread support count
-    getSupportUnreadCount: builder.query({
-      query: () => ({
-        event: "get-support-unread-count",
-      }),
-      providesTags: ["Unread"],
-    }),
-
-  }),
-});
-
-export const {
-  useGetAllSupportConversationsQuery,
-  useGetSupportMessagesQuery,
-  useGetSupportMessagesByReceiverQuery,
-  useAdminReplySupportMutation,
-  useGetSupportUnreadCountQuery,
-} = supportApi;
+// export const {
+//   useGetSupportConversationListSocketQuery,
+//   useGetSupportMessagesSocketQuery,
+//   useAdminReplySupportSocketMutation,
+// } = supportSocketApi;
+// export const {
+//   useGetAllSupportConversationsQuery,
+//   useGetSupportMessagesByConversationQuery,
+//   useAdminReplySupportMutation,
+// } = supportApi;

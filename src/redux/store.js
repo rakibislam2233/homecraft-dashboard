@@ -10,9 +10,8 @@ import {
 } from "redux-persist";
 import sessStorage from "redux-persist/lib/storage/session";
 import authReducer from "../redux/slices/authSlice";
-import baseApi from "./api/baseApi"; 
-import { supportApi } from "./features/supportMessage/supportApi";
-
+import baseApi from "./api/baseApi";
+ 
 const persistConfig = {
   key: "auth",
   storage: sessStorage,
@@ -32,9 +31,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
-
     [baseApi.reducerPath]: baseApi.reducer,
-    [supportApi.reducerPath]: supportApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -42,7 +39,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(baseApi.middleware, supportApi.middleware),
+    }).concat(baseApi.middleware),
 });
 
 export const RootState = store.getState;
