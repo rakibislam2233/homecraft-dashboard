@@ -63,7 +63,7 @@ const Sidebar = () => {
 
   return (
     <div className="fixed top-0 left-0 w-[270px] min-h-screen h-full">
-      <div className="h-full flex flex-col justify-between bg-gradient-to-b from-[#8E0003] to-[#4D0304] pt-[50px] border drop-shadow rounded-lg">
+      <div className="h-full flex flex-col justify-between bg-gradient-to-b from-[#8E0003] to-[#4D0304] pt-[50px]">
         {/* Logo */}
         <div className=" flex justify-center items-center text-primary text-3xl font-bold">
           {/* <img className="w-[70%] mx-auto" src={logo} alt="Logo" /> */}

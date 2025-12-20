@@ -10,6 +10,8 @@ import {
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
 } from "../../../redux/features/category/categoryApi";
+import { IoAddOutline } from "react-icons/io5";
+import { RxCross2 } from "react-icons/rx";
 
 const CategoryNew = () => {
   const [page, setPage] = useState(1);
@@ -129,7 +131,7 @@ const CategoryNew = () => {
         <img
           src={image}
           alt="Category"
-          style={{ width: 50, height: 50, objectFit: "cover" }}
+          className="w-16 h-16 object-cover rounded"
         />
       ),
     },
@@ -160,61 +162,102 @@ const CategoryNew = () => {
 
   return (
     <>
-      <div className="flex justify-end mb-6">
-        <Button type="primary" size="large" onClick={handleOpenModalForAdd}>
-          Add Category
-        </Button>
+      <div className="flex justify-end mb-6 mt-8">
+        <button
+          className="gradient-button text-lg lg:text-xl font-bold rounded-xl"
+          size="large"
+          onClick={handleOpenModalForAdd}
+        >
+          <IoAddOutline size={30} />
+          <span className="font-normal">Add Category</span>
+        </button>
       </div>
 
-      <Table
-        className="w-[60%]"
-        columns={columns}
-        dataSource={tableData}
-        loading={isLoading}
-        rowKey="id"
-        pagination={{
-          current: page,
-          total: data?.data?.pagination?.totalResult || 0,
-          pageSize: 10,
-          onChange: setPage,
-        }}
-      />
+      <div className="">
+        {/* <div className="bg-[#720000] w-full h-[60px] px-4 flx items-center justify-start">
+          <h2 className="text-xl lg:text-3xl font-normal text-white">Category List</h2>
+        </div> */}
+        <Table
+          className=""
+          columns={columns}
+          dataSource={tableData}
+          loading={isLoading}
+          rowKey="id"
+          pagination={{
+            current: page,
+            total: data?.data?.pagination?.totalResult || 0,
+            pageSize: 10,
+            onChange: setPage,
+          }}
+        />
+      </div>
 
       {/* ADD / EDIT MODAL */}
       <Modal
-        title={isEditMode ? "Edit Category" : "Add Category"}
+        title={
+          <h2 className="text-xl lg:text-2xl">
+            {isEditMode ? "Edit Category" : "Add Category"}
+          </h2>
+        }
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
+        closable={false}
         footer={null}
         centered
       >
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Category Name"
-        />
-
-        <Upload
-          listType="picture-card"
-          fileList={fileList}
-          showUploadList={false}
-          onChange={handleImageChange}
-          customRequest={({ onSuccess }) => onSuccess("ok")}
+        <div
+          onClick={() => setIsModalVisible(false)}
+          className="absolute top-0.5 right-0.5 w-9 h-9 bg-red-500 flex items-center justify-center cursor-pointer"
+          style={{
+            borderBottomLeftRadius: "1.25rem",
+            borderTopRightRadius: "0.5rem",
+          }}
         >
-          {imagePreview ? (
-            <img src={imagePreview} alt="preview" style={{ width: "100%" }} />
-          ) : (
-            <div>
-              <UploadOutlined />
-              <div>Upload Image</div>
-            </div>
-          )}
-        </Upload>
+          <RxCross2 className="text-white text-xl" />
+        </div>
+        <div className="">
+          <label htmlFor="categoryName" className="m-0 text-lg font-medium">
+            Category Type
+          </label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Category Name"
+            className="mt-4 py-2"
+          />
+        </div>
+        <div className="w-full mt-4">
+          <label htmlFor="categoryName" className="m-0 text-lg font-medium">
+            Upload Logo
+          </label>
+          <Upload
+            listType="picture-card"
+            className="w-full flex justify-center items-center"
+            fileList={fileList}
+            showUploadList={false}
+            onChange={handleImageChange}
+            customRequest={({ onSuccess }) => onSuccess("ok")}
+            style={{ width: "100%" }}
+          >
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="preview"
+                className="w-full h-24 object-contain"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center w-full h-full">
+                <UploadOutlined className="text-2xl mb-2" />
+                <div>Upload Image</div>
+              </div>
+            )}
+          </Upload>
+        </div>
 
         <Button
           type="primary"
           onClick={isEditMode ? handleEditCategory : handleAddCategory}
-          className="w-full"
+          className="w-full mt-6"
         >
           {isEditMode ? "Save Changes" : "Save"}
         </Button>
