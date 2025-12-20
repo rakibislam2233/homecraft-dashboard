@@ -36,8 +36,8 @@ export default function UserMessage() {
     fetchConversations();
   }, []);
 
-  console.log("conversationsData", conversationsData);
-  console.log("users : ", users);
+  // console.log("conversationsData", conversationsData);
+  // console.log("users : ", users);
 
   // Update users sidebar when conversations or online users change
   useEffect(() => {
@@ -45,6 +45,7 @@ export default function UserMessage() {
 
     const mappedUsers = conversationsData.results.map((conv) => {
       const user = conv.userId;
+      // console.log("user : ", user);
       return {
         id: user.id,
         name: user.profile.fullName,
@@ -80,7 +81,7 @@ export default function UserMessage() {
     }
   };
 
-  console.log("selectedUser : ", selectedUser);
+  // console.log("selectedUser : ", selectedUser);
   // Send message handler
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedUser) return;
